@@ -1,0 +1,12 @@
+footer {
+    background-color: black;
+    color: white;
+}
+
+footer nav {
+    width: 70%;
+}
+
+footer nav ul li {
+    margin: 3px 0;
+}
