@@ -4,16 +4,35 @@ import Main from './components/UI/Main/Main';
 
 import Routing from './routes/index';
 import {BrowserRouter} from "react-router";
-
-//import {AuthContent} from './context/Index.jsx';
+import { AuthContext } from './context';
+import {useEffect, useState} from "react";
 
 const Layout = ({ children }) => {
+    let [isAuth, setIsAuth] = useState(false);
+    let [link, setLinks] = useState([]);
+
+
+    useEffect(() => {
+        // const token = localStorage.getItem('token');
+        // if(token) {
+        //     setIsAuth(true);
+        // }
+        setIsAuth(true)
+    }, [])
+
     return (
-        <BrowserRouter>
-            <Header/>
-            <Main children={children}></Main>
-            <Footer/>
-        </BrowserRouter>
+        <AuthContext.Provider value={{
+            isAuth,
+            setIsAuth,
+            link,
+            setLinks
+        }}>
+            <BrowserRouter>
+                <Header/>
+                <Main children={children}></Main>
+                <Footer/>
+            </BrowserRouter>
+        </AuthContext.Provider>
     )
 }
 

@@ -4,11 +4,6 @@
     margin: 0;
 }
 
-header,
-footer {
-
-}
-
 img {
     color: white;
 }
@@ -29,4 +24,42 @@ ul {
 li a {
     color: white;
     font-weight: bold;
+}
+
+li a:hover {
+    color: #afafaf;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 100px 0;
+}
+
+form > * {
+    width: 50%;
+}
+
+input {
+    padding: 10px;
+    margin: 7px 10px;
+}
+
+button {
+    padding: 7px 20px;
+    border-radius: 3px;
+    border: none;
+    margin: 10px 15px;
+    background-color: black;
+    color: white;
+}
+
+form button {
+    padding: 13px 20px;
+}
+
+form h1 {
+    text-align: center;
+    margin-bottom: 2rem;
 }

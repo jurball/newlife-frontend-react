@@ -1,20 +1,27 @@
-export async function getData(url) {
-    const get = await fetch(url);
-    const data = await get.json();
-    console.log(data);
-    return data;
-}
 
+//let s = await postData('http://127.0.0.1:8000/authorization', auth)
 export async function postData(url, data) {
-    const post = await fetch(url, {
-        method: 'POST',
-        body: JSON.stringify(data),
-        headers: {
-            'Content-Type': 'application/json'
-        }
-    });
+    try {
+        const post = await fetch(url, {
+            method: 'POST',
+            body: JSON.stringify(data),
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
 
-    console.log(post);
+        const json = await post.json();
+
+        return json;
+    } catch(e) {
+        console.log(e);
+        console.error(e);
+        alert(e);
+    }
 }
 
-export async function putData(url, data) {}
+export function normalizeData(obj) {
+    return {
+        ...obj
+    }
+}

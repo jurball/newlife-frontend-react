@@ -1,5 +1,5 @@
 export const getToken = (token) => {
-    localStorage.setItem('token', token);
+    localStorage.getItem('token', token);
     // document.cookie = "...";
 }
 

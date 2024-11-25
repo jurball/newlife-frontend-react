@@ -1,9 +1,7 @@
 import "./Button.module.css";
 
-export default function Button() {
+export default function Button({children, ...props}) {
     return (
-        <>
-        <button>Sub</button>
-        </>
+        <button {...props}>{children}</button>
     )
 }

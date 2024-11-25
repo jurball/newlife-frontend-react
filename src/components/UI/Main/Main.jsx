@@ -1,4 +1,4 @@
-import './Main.module.css';
+import './Main.modules.css';
 
 export default function Main({ children }) {
     return (

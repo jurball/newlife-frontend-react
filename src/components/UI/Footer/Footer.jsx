@@ -1,4 +1,4 @@
-import './Footer.module.css';
+import './Footer.modules.css';
 import MyLinks from '../../MyLinks';
 import { Link } from "react-router";
 
