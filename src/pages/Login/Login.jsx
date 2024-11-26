@@ -7,23 +7,19 @@ import Button from "../../components/UI/Button/Button";
 import { postData } from '../../API/api-fetch';
 import { endpoint } from "../../API/config";
 // import {setToken} from "../../utils/api-utils";
-import {handleErrForm} from "../../utils/lib";
 
-// hook
 import {useContext, useEffect} from "react";
 import {AuthContext} from '../../context/index';
-import {useNavigate} from "react-router";
+import {useNavigate, NavLink} from "react-router";
 
 export default function Login() {
     const navigate = useNavigate();
     let {isAuth, setIsAuth} = useContext(AuthContext);
 
-
     useEffect(() => {
         if(isAuth){
             navigate("/cabinet");
         }
-
         console.log(isAuth)
     });
 
@@ -40,6 +36,7 @@ export default function Login() {
         }
 
         let res = await postData(url, auth);
+        console.log(res);
 
         if (res.success) {
             localStorage.setItem("token", res.token);
@@ -49,8 +46,11 @@ export default function Login() {
             return;
         }
 
-        err.innerText = handleErrForm(res);
-        console.log(res);
+        setTimeout(() =>{
+            err.innerText = '';
+        }, 2000)
+
+        err.innerText = res.message;
     }
 
     return (
@@ -61,6 +61,7 @@ export default function Login() {
             <label htmlFor="">Password</label>
             <Input placeholder="Password" type="password" name="password"/>
             <Button>Login</Button>
+            <p style={{color: "blue", textDecoration: "underline"}}><NavLink to="/registration">Регистрация</NavLink></p>
             <div id="error"></div>
         </form>
     )

@@ -1,9 +1,11 @@
 import "./MyInput.module.css";
 
 export default function MyInput({
-    props
+    placeholder,
+    type,
+    name
 }) {
     return (
-        <input {...props}/>
+        <input placeholder={placeholder} type={type} name={name}/>
     )
 }

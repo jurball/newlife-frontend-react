@@ -9,23 +9,31 @@ import {useEffect, useState} from "react";
 
 const Layout = ({ children }) => {
     let [isAuth, setIsAuth] = useState(false);
-    let [link, setLinks] = useState([]);
-
+    let [mylinks, setMyLinks] = useState([]);
 
     useEffect(() => {
-        // const token = localStorage.getItem('token');
-        // if(token) {
-        //     setIsAuth(true);
-        // }
-        setIsAuth(true)
-    }, [])
+        const token = localStorage.getItem('token');
+        if(token) {
+            setIsAuth(true);
+            setMyLinks([
+                {href: "/about", label: "About"},
+                {href: "/cabinet", label: "Cabinet"}
+            ]);
+        } else {
+            setMyLinks([
+                {href: "/about", label: "About"},
+                {href: "/login", label: "Login"},
+                {href: "/registration", label: "Register"},
+            ])
+        }
+    }, [isAuth])
 
     return (
         <AuthContext.Provider value={{
             isAuth,
             setIsAuth,
-            link,
-            setLinks
+            mylinks,
+            setMyLinks
         }}>
             <BrowserRouter>
                 <Header/>
