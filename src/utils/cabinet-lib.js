@@ -37,7 +37,7 @@ export async function handleLogout(setIsAuth, token) {
 }
 
 
-export async function postFile(e, url) {
+export async function postFile(e, url, setPosts, posts) {
     e.preventDefault();
     let formData = new FormData(e.target);
     let err = document.getElementById("user__err");
@@ -52,6 +52,7 @@ export async function postFile(e, url) {
 
         if (res.success) {
             errMessage(err, res, btn, "green");
+            setPosts([...posts, res])
             return;
         }
 
@@ -62,12 +63,13 @@ export async function postFile(e, url) {
     }
 }
 
-export async function deleteFile(url, token, id) {
+export async function deleteFile(url, url2, token, id, setPosts) {
     try {
         let res = await deleteDataFile(url + "/" + id, token);
-        // let data = res.status;
-
-        // return data;
+        let resPost = await getData(url2 + "/files/disk", token);
+        console.log(res);
+        setPosts([...resPost]);
+        return res
     } catch (e) {
         console.log(e)
     }

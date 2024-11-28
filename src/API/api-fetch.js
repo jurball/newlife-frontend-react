@@ -51,7 +51,7 @@ export async function deleteDataFile(url, token) {
         });
 
 
-        return post.statusnpm;
+        return post.status;
     } catch(e) {
         console.log(e);
         console.error(e);

@@ -6,18 +6,15 @@ import {AuthContext} from "../../context/index";
 import Button from "../../components/UI/Button/Button";
 import Formcontent from "../../components/UI/formcontent/Formcontent";
 import { endpoint } from "../../API/config";
-import { myFile, handleLogout, postFile, deleteFile } from "../../utils/cabinet-lib";
+import { handleLogout, postFile, deleteFile } from "../../utils/cabinet-lib";
 
 import {customFetch, getData} from "../../API/api-fetch";
 import DownloadFileButton from "../../utils/FileDownload";
 import FileEdit from "../../utils/FileEdit";
 import AddAccess from "../../utils/AddAccess";
 import DelAccess from "../../utils/DelAccess";
-import {clear} from "@testing-library/user-event/dist/clear";
 
 const url = endpoint.files;
-
-
 
 export default function Cabinet() {
     const navigate = useNavigate();
@@ -28,19 +25,12 @@ export default function Cabinet() {
     const token = localStorage.getItem("token");
 
     async function myFile() {
-        try {
-            // проверка на пустое значение res
-            let res = await getData(url + "/disk", token);
-            // console.log(res);
-            setPosts(res)
-        } catch(e) {
-            console.log(e)
-        }
+        let res = await getData(url + "/disk", token);
+        setPosts(res)
     }
 
     useEffect(() => {
         myFile();
-        console.log("sdd")
         fetch(endpoint.shared, {
             method: "GET",
             headers: {
@@ -52,27 +42,6 @@ export default function Cabinet() {
                 return res.json()
             })
             .then(json => {
-                console.log(json)
-                setShare([...json])
-            })
-            .catch(err => console.log(err));
-    }, [postFile])
-
-    useEffect(() => {
-        myFile();
-        console.log("sdd")
-        fetch(endpoint.shared, {
-            method: "GET",
-            headers: {
-                "Authorization": "token " + token,
-                "Content-Type": "application/json"
-            }
-        })
-            .then(res => {
-                return res.json()
-            })
-            .then(json => {
-                console.log(json)
                 setShare([...json])
             })
             .catch(err => console.log(err));
@@ -86,8 +55,6 @@ export default function Cabinet() {
         }
     }, [isAuth]);
 
-
-
     return (
         <div className="user">
             <div id="user__err"></div>
@@ -95,7 +62,7 @@ export default function Cabinet() {
                 <Button id="exit" onClick={() => handleLogout(setIsAuth, token)} type="submit">Выйти</Button>
             </div>
             <div className="user__body">
-                <Formcontent title="Опубликуйте файл" encType="multipart/form-data" onSubmit={(e) => postFile(e, url)} style={{marginTop: 0}}>
+                <Formcontent title="Опубликуйте файл" encType="multipart/form-data" onSubmit={(e) => postFile(e, url, setPosts, posts)} style={{marginTop: 0}}>
                     <input type="file" name="files[]"/>
                     <Button id="fileBtn">Send</Button>
                 </Formcontent>
@@ -111,7 +78,7 @@ export default function Cabinet() {
                                   </div>
                                 <div style={{display: "flex"}}>
                                     <DownloadFileButton fileId={post.file_id}/>
-                                    <Button onClick={() => deleteFile(url, token, `${post.file_id}/`)}>Delete</Button>
+                                    <Button onClick={() => deleteFile(url, `${endpoint.url}`, token, `${post.file_id}/`, setPosts)}>Delete</Button>
                                     <Button onClick={() => {
                                         fetch(endpoint.shared, {
                                             method: "GET",
