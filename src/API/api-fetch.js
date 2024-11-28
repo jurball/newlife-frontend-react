@@ -1,11 +1,14 @@
-export async function postData(url, data) {
+export async function postData(
+    url,
+    data,
+    head = {
+        'Content-Type': 'application/json'
+}) {
     try {
         const post = await fetch(url, {
             method: 'POST',
             body: JSON.stringify(data),
-            headers: {
-                'Content-Type': 'application/json'
-            }
+            headers: head
         });
 
         const json = await post.json();
@@ -14,18 +17,17 @@ export async function postData(url, data) {
     } catch(e) {
         console.log(e);
         console.error(e);
-        alert("DEBUG: ошибка функции postData");
+        // alert("DEBUG: ошибка функции postData");
     }
 }
 
-export async function authPostData(url, data) {
+export async function postDataFile(url, data, token) {
     try {
         const post = await fetch(url, {
-            method: 'POST',
-            body: JSON.stringify(data),
+            method: "POST",
+            body: data,
             headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `${data.token}`
+                'Authorization': 'token ' + token
             }
         });
 
@@ -35,7 +37,38 @@ export async function authPostData(url, data) {
     } catch(e) {
         console.log(e);
         console.error(e);
-        alert("DEBUG: ошибка функции postData");
+        // alert("DEBUG: ошибка функции postDataFile");
+    }
+}
+
+export async function deleteDataFile(url, token) {
+    try {
+        const post = await fetch(url, {
+            method: "DELETE",
+            headers: {
+                'Authorization': 'token ' + token
+            }
+        });
+
+
+        return post.statusnpm;
+    } catch(e) {
+        console.log(e);
+        console.error(e);
+        // alert("DEBUG: ошибка функции postDataFile");
+    }
+}
+
+export async function customFetch(url, method = "GET", head= {}) {
+    try {
+        let res = await fetch(url, {
+            method: method,
+            headers: head
+        })
+        let myBlob = await res.blob();
+        return myBlob;
+    } catch (e) {
+        console.log(e);
     }
 }
 
@@ -44,18 +77,18 @@ export async function getData(url, data) {
         const post = await fetch(url, {
             method: 'GET',
             headers: {
-                'Authorization': `token ${data.token}`
+                'Content-Type': 'application/json',
+                'Authorization': `token ${data}`
             }
         });
 
         const json = await post.json();
-        console.log(data.token);
 
         return json;
     } catch(e) {
         console.log(e);
         console.error(e);
-        alert("DEBUG: ошибка функции postData");
+        // alert("DEBUG: ошибка функции getData");
     }
 }
 

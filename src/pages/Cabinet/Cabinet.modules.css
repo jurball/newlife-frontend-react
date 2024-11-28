@@ -1,0 +1,28 @@
+.user {
+
+}
+
+.user__head {
+    text-align: right;
+}
+
+.user__head > button {
+    width: 130px;
+}
+
+.user__body {
+    text-align: center;
+}
+
+.user__block {
+    background-color: teal;
+}
+
+#user__err {
+    background-color: red;
+    text-align: center;
+    color: white;
+    position: fixed;
+    border-radius: 2px;
+    font-size: 16px;
+}

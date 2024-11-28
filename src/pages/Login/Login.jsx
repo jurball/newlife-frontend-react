@@ -20,7 +20,6 @@ export default function Login() {
         if(isAuth){
             navigate("/cabinet");
         }
-        console.log(isAuth)
     });
 
     async function handleForm(e) {
