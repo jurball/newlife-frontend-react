@@ -50,25 +50,11 @@ export async function deleteDataFile(url, token) {
             }
         });
 
-
         return post.status;
     } catch(e) {
         console.log(e);
         console.error(e);
         // alert("DEBUG: ошибка функции postDataFile");
-    }
-}
-
-export async function customFetch(url, method = "GET", head= {}) {
-    try {
-        let res = await fetch(url, {
-            method: method,
-            headers: head
-        })
-        let myBlob = await res.blob();
-        return myBlob;
-    } catch (e) {
-        console.log(e);
     }
 }
 

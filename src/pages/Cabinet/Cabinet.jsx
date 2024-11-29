@@ -8,11 +8,10 @@ import Formcontent from "../../components/UI/formcontent/Formcontent";
 import { endpoint } from "../../API/config";
 import { handleLogout, postFile, deleteFile } from "../../utils/cabinet-lib";
 
-import {customFetch, getData} from "../../API/api-fetch";
+import {getData} from "../../API/api-fetch";
 import DownloadFileButton from "../../utils/FileDownload";
 import FileEdit from "../../utils/FileEdit";
 import AddAccess from "../../utils/AddAccess";
-import DelAccess from "../../utils/DelAccess";
 
 const url = endpoint.files;
 
@@ -79,30 +78,24 @@ export default function Cabinet() {
                                 <div style={{display: "flex"}}>
                                     <DownloadFileButton fileId={post.file_id}/>
                                     <Button onClick={() => deleteFile(url, `${endpoint.url}`, token, `${post.file_id}/`, setPosts)}>Delete</Button>
-                                    <Button onClick={() => {
-                                        fetch(endpoint.shared, {
-                                            method: "GET",
-                                            headers: {
-                                                "Authorization": "token " + token,
-                                                "Content-Type": "application/json"
-                                            }
-                                        })
-                                            .then(res => {
-                                                return res.json()
-                                            })
-                                            .then(json => {
-                                                console.log(json)
-                                            })
-                                            .catch(err => console.log(err));
-                                    }}>Share</Button>
-                                    <div>
-                                        <input placeholder="Имя" type="text" id={post.file_id}/>
-                                        <FileEdit fileId={post.file_id}/>
-                                        <input placeholder="E-mail для доступа" type="text" id={post.file_id + "1"}/>
-                                        <AddAccess fileId={post.file_id}/>
-                                        <input placeholder="E-mail удалить доступ" type="email" id={post.file_id + "2"}/>
-                                        <DelAccess fileId={post.file_id}/>
-                                    </div>
+                                    {/*<Button onClick={() => {*/}
+                                    {/*    fetch(endpoint.shared, {*/}
+                                    {/*        method: "GET",*/}
+                                    {/*        headers: {*/}
+                                    {/*            "Authorization": "token " + token,*/}
+                                    {/*            "Content-Type": "application/json"*/}
+                                    {/*        }*/}
+                                    {/*    })*/}
+                                    {/*        .then(res => {*/}
+                                    {/*            return res.json()*/}
+                                    {/*        })*/}
+                                    {/*        .then(json => {*/}
+                                    {/*            console.log(json)*/}
+                                    {/*        })*/}
+                                    {/*        .catch(err => console.log(err));*/}
+                                    {/*}}>Share</Button>*/}
+                                    <FileEdit fileId={post.file_id}/>
+                                    <AddAccess fileId={post.file_id}/>
                                 </div>
                             </div>
                             <hr/>

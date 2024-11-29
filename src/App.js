@@ -16,7 +16,6 @@ const Layout = ({ children }) => {
 
     useEffect(() => {
         const token = localStorage.getItem('token');
-        console.log("sd")
         if(token) {
             setIsAuth(true);
             setMyLinks([
