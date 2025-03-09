@@ -1,0 +1,24 @@
+* {
+    box-sizing: border-box;
+}
+
+input {
+    width: 100%;
+    outline: none;
+}
+
+.is-invalid {
+    border: 1px solid red;
+}
+
+.is-invalid-text {
+    color: red;
+}
+
+.success {
+    border: 1px solid green;
+}
+
+.success-text {
+    color: green;
+}
