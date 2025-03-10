@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
-import Root from './Root';
+import App from './App';
 import {createBrowserRouter, RouterProvider} from "react-router-dom";
 
 import Index from "./components/Index";
@@ -13,7 +13,7 @@ import Login from "./components/Login";
 const router = createBrowserRouter([
     {
         path: "/",
-        element: <Root />,
+        element: <App />,
         errorElement: <ErrorPage />,
         children: [
             {

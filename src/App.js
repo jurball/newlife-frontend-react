@@ -7,7 +7,7 @@ import { Auth } from "./context/Auth";
 import Header from './components/UI/Header';
 import Footer from './components/UI/Footer';
 
-function Root() {
+function App() {
     const [isAuth, setAuth] = useState(false);
     console.log(isAuth);
     return (
@@ -22,4 +22,4 @@ function Root() {
     );
 }
 
-export default Root;
+export default App;
