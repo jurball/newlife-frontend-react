@@ -1,0 +1,112 @@
+* {
+    box-sizing: border-box;
+    padding: 0;
+    margin: 0;
+}
+
+#root {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+main {
+    flex: 1 0 auto;
+    margin: 0 auto;
+    width: 100%;
+    max-width: 1300px;
+    padding: 30px 60px;
+    animation: fadein 500ms ease;
+}
+
+img {
+    color: white;
+}
+
+a {
+    text-decoration: none;
+    color: black;
+}
+
+a.active {
+    text-decoration: underline;
+}
+
+.not_active {
+    text-decoration: none;
+}
+
+ul {
+    list-style-type: none;
+}
+
+li a {
+    color: white;
+    font-weight: bold;
+}
+
+li a:hover {
+    color: #afafaf;
+}
+
+form {
+    margin: 100px 0 0 0;
+    padding: 20px;
+}
+
+form button {
+    padding: 13px 20px;
+    width: 100%;
+    margin: 5px 0;
+}
+
+form h1 {
+    margin-bottom: 1rem;
+}
+
+input {
+    padding: 10px;
+    margin: 7px 0;
+    width: 100%;
+    outline: none;
+    transition: 1s all ease
+}
+
+button {
+    padding: 7px 20px;
+    border-radius: 3px;
+    border: none;
+    margin: 10px 15px;
+    background-color: black;
+    color: white;
+}
+
+.is-invalid {
+    border: 1px solid red;
+    box-shadow: 0 0 0 4px rgba(255, 0, 0, 0.27);;
+    transition: 500ms all ease;
+}
+
+.success {
+    border: 1px solid green;
+    box-shadow: 0 0 0 3px rgba(0, 255, 0, 0.27);
+    transition: 500ms all ease;
+}
+
+.is-invalid-text {
+    color: red;
+    margin: 10px 0;
+}
+
+@keyframes fadein {
+    from {
+        opacity: 0.2;
+        transform: translateY(-13px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+
+    }
+
+}

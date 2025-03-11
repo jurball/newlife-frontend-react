@@ -1,39 +1,59 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import ReactDOM from 'react-dom/client';
-import './index.css';
-// import App, {loader as rootLoader} from './App';
 import App from './App';
 import {createBrowserRouter, RouterProvider} from "react-router-dom";
+import AuthProvider, {Auth} from "./context/Auth";
 
-import Index from "./components/Index";
-import Home from "./components/Home";
-import ErrorPage from "./components/ErrorPage/ErrorPage";
-import Registration from "./components/Registration";
-import Login from "./components/Login";
+import ErrorPage from "./pages/ErrorPage/ErrorPage";
+import Index from "./pages/Index";
+import Cabinet from "./pages/UserPages/CabinetPage/Cabinet";
+import Registration from "./pages/RegistrationPage/Registration";
+import Login from "./pages/LoginPage/Login";
+import PreLoader from "./pages/components/UI/PreLoader/PreLoader";
+import Protect from "./Protect";
 
 const router = createBrowserRouter([
     {
         path: "/",
         element: <App />,
         errorElement: <ErrorPage />,
-        // loader: rootLoader,
+        loader: null,
+        action: null,
         children: [
             {
                 index: true,
                 element: <Index />,
             },
             {
-                path: "/home",
-                element: <Home />,
-            },
-            {
-                path: "/registration",
+                path: "registration",
                 element: <Registration />,
             },
             {
-                path: "/login",
+                path: "login",
                 element: <Login />,
-            }
+            },
+            {
+                path: "loader",
+                element: <PreLoader />,
+            },
+            {
+                path: "cabinet",
+                element: <Protect />,
+                children: [
+                    {
+                        index: true,
+                        element: <Cabinet />,
+                    },
+                    {
+                        path: "edit/:id",
+                        element: <main><p>Edit</p></main>,
+                    },
+                    {
+                        path: "accesses/:id",
+                        element: <main><p>Add Accesses</p></main>,
+                    }
+                ]
+            },
         ]
     }
 ]);
@@ -41,6 +61,8 @@ const router = createBrowserRouter([
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-      <RouterProvider router={router} />
+      <AuthProvider>
+          <RouterProvider router={router} />
+      </AuthProvider>
   </React.StrictMode>
 );

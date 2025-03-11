@@ -1,38 +1,21 @@
 import './App.css';
+import React, {useContext, useEffect, useState} from "react";
+import {Outlet} from "react-router-dom";
 
-import React, {useEffect, useState} from "react";
-import {useLoaderData, Outlet} from "react-router-dom";
-import { Auth } from "./context/Auth";
-
-import Header from './components/UI/Header/Header';
-import Footer from './components/UI/Footer/Footer';
-import Links from './components/UI/Links';
-
-// export function loader() {
-//     return !!!localStorage.getItem("token");
-// }
+import Header from './layout/Header/Header';
+import Footer from './layout/Footer/Footer';
+import ProtectedRoute from './ProtectedRoute';
+import {Auth} from "./context/Auth";
 
 function App() {
-    // const data = useLoaderData();
-    const [isAuth, setAuth] = useState(false);
-
-    useEffect(() => {
-        if (localStorage.getItem('token')) {
-            setAuth(true);
-        }
-    }, []);
-
-    console.log(isAuth);
+    const { isAuth, setAuth } = useContext(Auth);
 
     return (
-        <Auth.Provider value={{
-            isAuth,
-            setAuth,
-        }}>
-            <Header links={<Links isAuth={isAuth} />} />
+        <>
+            <Header/>
             <Outlet/>
-            <Footer links={<Links isAuth={isAuth} />} />
-        </Auth.Provider>
+            <Footer/>
+        </>
     );
 }
 

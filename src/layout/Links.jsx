@@ -1,8 +1,11 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import {NavLink} from "react-router-dom";
+import {Auth} from "../context/Auth";
 
 function Links(props) {
-    if (props.isAuth) {
+    const { isAuth } = useContext(Auth);
+
+    if (isAuth) {
         return (
             <>
                 <li>
@@ -10,9 +13,6 @@ function Links(props) {
                 </li>
                 <li>
                     <NavLink to="/cabinet">Cabinet</NavLink>
-                </li>
-                <li>
-                    <NavLink to="/logout">Выйти</NavLink>
                 </li>
             </>
         );

@@ -1,16 +1,14 @@
 import React from 'react';
-import {NavLink} from 'react-router-dom';
 import Styles from './Footer.module.css';
+import Links from "../Links";
 
 function Footer(props) {
     return (
         <footer className={`${Styles.footer}`}>
             <nav className={`${Styles.navbar}`}>
-                <h1>
-                    LOGO
-                </h1>
+                <h1>LOGO</h1>
                 <ul className={`${Styles.menu}`}>
-                    {props.links}
+                    <Links />
                 </ul>
             </nav>
         </footer>

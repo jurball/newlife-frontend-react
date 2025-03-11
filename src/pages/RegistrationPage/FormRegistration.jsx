@@ -1,10 +1,16 @@
-import React, {useState} from 'react';
-import { useNavigate } from 'react-router-dom';
-import { endpoint } from '../api/endpoint';
-import { fetchData } from '../api/api-utils';
+import {Link, useNavigate} from "react-router-dom";
+import React, {useState} from "react";
 
-function Registration() {
+import {fetchData} from "../../api/api-utils";
+import {endpoint} from "../../api/endpoint";
+
+import ValidationError from "../components/UI/Form/ValidationError";
+import InputField from "../components/UI/Form/InputField";
+
+export default function FormRegistration() {
     const navigate = useNavigate();
+
+    const [loading, setLoading] = useState(false);
     const [error, setError] = useState({});
     const [message, setMessage] = useState({});
     const [body, setBody] = useState({
@@ -23,6 +29,7 @@ function Registration() {
         e.preventDefault();
         setError({});
         setMessage({});
+        setLoading(true);
         const [data] = await fetchData("POST", endpoint.registration, {
             'Content-Type': 'application/json'
         }, body);
@@ -36,50 +43,56 @@ function Registration() {
             navigate('/login');
         } else {
             setError({});
-            setMessage({ "status": "Неизвестная ошибка" })
+            setMessage({ "status": "Неизвестная ошибка" });
         }
+        setLoading(false);
     }
 
     return (
         <main>
             <form onSubmit={handleForm}>
-                <label htmlFor="">Имя</label>
-                <input
+                <h1>Регистрация</h1>
+                <InputField
+                    label="Имя"
                     type="text"
                     name="first_name"
-                    className={`${!error.first_name && body.first_name ? body.first_name && "success" : error.first_name && "is-invalid"}`}
+                    value={body.first_name}
+                    placeholder="Enter first name"
                     onChange={handleChange}
+                    error={error.first_name}
                 />
-                <label htmlFor="">Фамилия</label>
-                <input
+                <InputField
+                    label="Фамилия"
                     type="text"
                     name="last_name"
-                    className={`${!error.last_name && body.last_name ? body.last_name && "success" : error.last_name && "is-invalid"}`}
+                    value={body.last_name}
+                    placeholder="Enter last name"
                     onChange={handleChange}
+                    error={error.last_name}
                 />
-                <label htmlFor="">E-mail</label>
-                <input
+                <InputField
+                    label="E-mail"
                     type="email"
                     name="email"
-                    className={`${!error.email && body.email ? body.email && "success" : error.email && "is-invalid"}`}
+                    value={body.email}
+                    placeholder="Enter email"
                     onChange={handleChange}
+                    error={error.email}
                 />
-                <label htmlFor="">Password</label>
-                <input
+                <InputField
+                    label="Password"
                     type="password"
                     name="password"
-                    className={`${!error.password && body.password ? body.password && "success" : error.password && "is-invalid"}`}
+                    value={body.password}
+                    placeholder="Enter password"
                     onChange={handleChange}
+                    error={error.password}
                 />
                 <button type="submit">Send</button>
+                <Link to="/login">Войти</Link>
+                <ValidationError message={message} />
+                {loading && <div>Загрузка...</div>}
             </form>
-            <div className="box-error">
-                {message && Object.entries(message).map(([key, value]) => (
-                    <p className="is-invalid-text" key={key}>{value}</p>
-                ))}
-            </div>
         </main>
     );
 }
-
-export default Registration;

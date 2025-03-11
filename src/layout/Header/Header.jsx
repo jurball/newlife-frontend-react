@@ -1,16 +1,14 @@
 import Styles from './Header.module.css';
-import {Link, NavLink} from "react-router-dom";
 import React from "react";
+import Links from "../Links";
 
 export default function Header(props) {
     return (
         <header className={`${Styles.header}`}>
             <nav className={`${Styles.navbar}`}>
-                <h1>
-                    LOGO
-                </h1>
+                <h1>LOGO</h1>
                 <ul className={`${Styles.menu}`}>
-                    {props.links}
+                    <Links />
                 </ul>
             </nav>
         </header>

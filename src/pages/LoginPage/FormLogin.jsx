@@ -1,12 +1,18 @@
-import React, {useState, useContext} from 'react';
-import { Auth } from '../context/Auth';
-import { useNavigate } from 'react-router-dom';
-import { endpoint } from '../api/endpoint';
-import { fetchData } from '../api/api-utils';
+import {Link, useNavigate} from "react-router-dom";
+import React, {useContext, useState} from "react";
 
-function Login() {
+import {fetchData} from "../../api/api-utils";
+import {endpoint} from "../../api/endpoint";
+
+import InputField from "../components/UI/Form/InputField";
+import ValidationError from "../components/UI/Form/ValidationError";
+import {Auth} from "../../context/Auth";
+
+export default function FormLogin() {
     const { setAuth } = useContext(Auth);
     const navigate = useNavigate();
+
+    const [loading, setLoading] = useState(false);
     const [error, setError] = useState({});
     const [message, setMessage] = useState({});
     const [body, setBody] = useState({ email: "", password: "" });
@@ -19,6 +25,8 @@ function Login() {
     async function handleForm(e) {
         e.preventDefault();
         setError({});
+        setMessage({});
+        setLoading(true);
         const [data] = await fetchData("POST", endpoint.authorization, {
             'Content-Type': 'application/json'
         }, body);
@@ -32,43 +40,44 @@ function Login() {
             setMessage({ status: data.message });
             setError(data.message);
         } else if (data.success) {
-            localStorage.setItem('token', data.token);
             setAuth(true);
-            navigate('/cabinet');
+            localStorage.setItem('token', data.token);
+            setTimeout(() => {
+                navigate('/cabinet');
+            }, 200)
         } else {
             setMessage({ status: 'error' });
         }
+        setLoading(false);
     }
 
     return (
         <main>
             <form onSubmit={handleForm}>
-                <label htmlFor="">
-                    E-mail
-                </label>
-                <input
-                    type="email" name="email"
-                    className={`${!error.email && body.email ? body.email && "success" : error.email && "is-invalid"}`}
+                <h1>Авторизация</h1>
+                <InputField
+                    label="E-mail"
+                    type="email"
+                    name="email"
+                    value={body.email}
+                    placeholder="Enter email"
                     onChange={handleChange}
+                    error={error.email}
                 />
-                <label htmlFor="">
-                    Password
-                </label>
-                <input
+                <InputField
+                    label="Password"
                     type="password"
                     name="password"
-                    className={`${!error.password && body.password ? body.password && "success" : error.password && "is-invalid"}`}
+                    value={body.password}
+                    placeholder="Enter password"
                     onChange={handleChange}
+                    error={error.password}
                 />
                 <button type="submit">Send</button>
+                <Link to="/registration">Регистрация</Link>
+                <ValidationError message={message} />
+                {loading && <div>Загрузка...</div>}
             </form>
-            <div className="box-error">
-                {message && Object.entries(message).map(([key, value]) => (
-                    <p className="is-invalid-text" key={key}>{value}</p>
-                ))}
-            </div>
         </main>
     );
 }
-
-export default Login;
