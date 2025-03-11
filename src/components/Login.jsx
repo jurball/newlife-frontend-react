@@ -5,19 +5,15 @@ import { endpoint } from '../api/endpoint';
 import { fetchData } from '../api/api-utils';
 
 function Login() {
-    const navigate = useNavigate();
     const { setAuth } = useContext(Auth);
-    const [body, setBody] = useState({
-        email: "",
-        password: "",
-    });
-
+    const navigate = useNavigate();
     const [error, setError] = useState({});
-    const [inputError, setInputError] = useState({});
+    const [message, setMessage] = useState({});
+    const [body, setBody] = useState({ email: "", password: "" });
 
     function handleChange(e) {
         setBody({ ...body, [e.target.name]: e.target.value });
-        setInputError({...inputError, [e.target.name]: ""});
+        setError({ ...error, [e.target.name]: "" });
     }
 
     async function handleForm(e) {
@@ -25,24 +21,22 @@ function Login() {
         setError({});
         const [data] = await fetchData("POST", endpoint.authorization, {
             'Content-Type': 'application/json'
-        }, body)
-        // navigate('/cabinet');
+        }, body);
+
         console.log(data);
 
         if (!data.success && typeof data.message === "object") {
+            setMessage(data.message);
             setError(data.message);
         } else if (!data.success && typeof data.message === "string") {
-            setError({
-                'status': data.message
-            });
+            setMessage({ status: data.message });
+            setError(data.message);
         } else if (data.success) {
             localStorage.setItem('token', data.token);
             setAuth(true);
             navigate('/cabinet');
         } else {
-            setError({
-                'status': 'Неизвестная ошибка'
-            })
+            setMessage({ status: 'error' });
         }
     }
 
@@ -54,7 +48,7 @@ function Login() {
                 </label>
                 <input
                     type="email" name="email"
-                    className={`${error.email ? "is-invalid" : ""}`}
+                    className={`${!error.email && body.email ? body.email && "success" : error.email && "is-invalid"}`}
                     onChange={handleChange}
                 />
                 <label htmlFor="">
@@ -63,13 +57,13 @@ function Login() {
                 <input
                     type="password"
                     name="password"
-                    className={`${error.password ? "is-invalid" : ""}`}
+                    className={`${!error.password && body.password ? body.password && "success" : error.password && "is-invalid"}`}
                     onChange={handleChange}
                 />
                 <button type="submit">Send</button>
             </form>
             <div className="box-error">
-                {error && Object.entries(error).map(([key, value]) => (
+                {message && Object.entries(message).map(([key, value]) => (
                     <p className="is-invalid-text" key={key}>{value}</p>
                 ))}
             </div>
