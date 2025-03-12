@@ -1,14 +1,14 @@
 import Styles from './Header.module.css';
 import React from "react";
-const Links = React.lazy(() => import('../Links'));
+import Links from '../Links';
 
-export default function Header() {
+export default function Header({ isAuth }) {
     return (
         <header className={`${Styles.header}`}>
             <nav className={`${Styles.navbar}`}>
                 <h1>LOGO</h1>
                 <ul className={`${Styles.menu}`}>
-                    <Links />
+                    <Links isAuth={isAuth} />
                 </ul>
             </nav>
         </header>

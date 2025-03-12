@@ -1,41 +1,41 @@
 import React, {Suspense} from 'react';
 import ReactDOM from 'react-dom/client';
-import App from './App';
-import {createBrowserRouter} from "react-router-dom";
+import App, { loader as appLoader }  from './App';
+import {createBrowserRouter, RouterProvider} from "react-router-dom";
 
 import ErrorPage from "./pages/ErrorPage/ErrorPage";
 import Index from "./pages/Index";
 import Cabinet, { loader as loaderCabinet } from "./pages/UserPages/CabinetPage/Cabinet";
-import Registration from "./pages/RegistrationPage/Registration";
-import PreLoader from "./pages/components/UI/PreLoader/PreLoader";
-
-const Login = React.lazy(() => import("./pages/LoginPage/Login") );
-const Route = React.lazy(() => import("./Route"));
+import Registration, { loader as registrationLoader } from "./pages/RegistrationPage/Registration";
+import Preloader from "./pages/components/UI/Preloader/Preloader";
+import Login, {loader as loginLoader} from "./pages/LoginPage/Login";
 
 const router =  createBrowserRouter([
     {
         path: "/",
         element: <App />,
+        // loader: appLoader,
         errorElement: <ErrorPage />,
+        hydrateFallbackElement: <Preloader/>,
         children: [
             {
                 index: true,
                 element: <Index />,
+                errorElement: <ErrorPage />,
+
             },
             {
                 path: "registration",
                 element: <Registration />,
+                loader: registrationLoader,
+                errorElement: <ErrorPage />,
+
             },
             {
                 path: "login",
-                element:
-                    <Suspense fallback={<PreLoader /> }>
-                        <Login />
-                    </Suspense>,
-            },
-            {
-                path: "loader",
-                element: <PreLoader />,
+                element: <Login />,
+                loader: loginLoader,
+                hydrateFallbackElement: <Preloader/>,
             },
             {
                 path: "cabinet",
@@ -44,14 +44,20 @@ const router =  createBrowserRouter([
                         index: true,
                         element: <Cabinet />,
                         loader: loaderCabinet,
+                        errorElement: <ErrorPage />,
+
                     },
                     {
                         path: "edit/:id",
                         element: <main><p>Edit</p></main>,
+                        errorElement: <ErrorPage />,
+
                     },
                     {
                         path: "accesses/:id",
                         element: <main><p>Add Accesses</p></main>,
+                        errorElement: <ErrorPage />,
+
                     }
                 ]
             },
@@ -62,8 +68,8 @@ const router =  createBrowserRouter([
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-      <Suspense fallback={<PreLoader />}>
-          <Route router={router}/>
-      </Suspense>
+      <RouterProvider router={router}   future={{
+          v7_startTransition: true,
+      }}/>
   </React.StrictMode>
 );

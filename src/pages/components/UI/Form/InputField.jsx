@@ -11,6 +11,7 @@ function InputField(props) {
                 onChange={props.onChange}
                 placeholder={props.placeholder}
                 value={props.value}
+                autoComplete="off"
             />
         </div>
     );

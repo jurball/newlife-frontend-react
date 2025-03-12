@@ -1,16 +1,33 @@
-import {Link, useNavigate} from "react-router-dom";
-import React, {useContext, useState} from "react";
+import {Link, Navigate, useLoaderData, useNavigate} from "react-router-dom";
+import React, {useState} from "react";
 
-import {fetchData} from "../../api/api-utils";
+import {fetchData, getData, getToken} from "../../api/api-utils";
 import {endpoint} from "../../api/endpoint";
 
 import ValidationError from "../components/UI/Form/ValidationError";
 import InputField from "../components/UI/Form/InputField";
-import {Auth} from "../../context/Auth";
+import Preloader from "../components/UI/Preloader/Preloader";
+
+export async function loader() {
+    const token = getToken();
+
+    const res = await fetch('http://localhost:8000/files/check', {
+        method: 'GET',
+        headers: {
+            Authorization: `Bearer ${localStorage.getItem('token')}`,
+        }
+    });
+
+    if (res.status === 404) {
+        return { isAuth: true };
+    }
+
+    return { isAuth: false };
+}
 
 export default function Registration() {
-    const { isAuth } = useContext(Auth);
     const navigate = useNavigate();
+    const { isAuth } = useLoaderData();
 
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState({});
@@ -23,7 +40,7 @@ export default function Registration() {
     });
 
     if (isAuth) {
-        navigate("/cabinet");
+        return <Navigate to="/cabinet" replace />
     }
 
     function handleChange(e) {
@@ -48,8 +65,7 @@ export default function Registration() {
         } else if (data.success) {
             navigate('/login');
         } else {
-            setError({});
-            setMessage({ "status": "Неизвестная ошибка" });
+            setMessage({ status: data.message });
         }
         setLoading(false);
     }
@@ -97,7 +113,7 @@ export default function Registration() {
                 <button type="submit">Send</button>
                 <Link to="/login">Войти</Link>
                 <ValidationError message={message} />
-                {loading && <div>Загрузка...</div>}
+                {loading && <Preloader />}
             </form>
         </main>
     );

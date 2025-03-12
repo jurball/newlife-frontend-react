@@ -3,9 +3,9 @@ import {NavLink} from "react-router-dom";
 import {Auth} from "../context/Auth";
 
 function Links(props) {
-    const { isAuth } = useContext(Auth);
+    // const { isAuth } = useContext(Auth);
 
-    if (isAuth) {
+    if (props.isAuth) {
         return (
             <>
                 <li>

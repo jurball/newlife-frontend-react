@@ -1,7 +1,7 @@
-import Styles from './PreLoader.module.css';
+import Styles from './Preloader.module.css';
 import React from 'react';
 
-function PreLoader(props) {
+function Preloader(props) {
     return (
         <main className={`${Styles.preloader}`}>
             <div className={`${Styles.bubblingG}`}>
@@ -13,4 +13,4 @@ function PreLoader(props) {
     );
 }
 
-export default PreLoader;
+export default Preloader;
