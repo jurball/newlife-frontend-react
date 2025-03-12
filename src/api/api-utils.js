@@ -48,3 +48,31 @@ export async function logoutFetch(token) {
 
     return [data, code];
 }
+
+export const getToken = () => {
+    if (document.cookie === '') {
+        return localStorage.getItem('token');
+    }
+
+    let token = document.cookie.split(';').find((item) => item.includes('token'));
+    return token ? token.split('=')[1] : null;
+}
+
+export const setToken = (token) => {
+    localStorage.setItem('token', token);
+    document.cookie = `token=${token};`;
+}
+
+export const deleteToken = (token) => {
+    localStorage.removeItem('token');
+    document.cookie = `token=;`;
+}
+
+export const hasToken = () => {
+    const token = localStorage.getItem("token");
+    if (!token) {
+        return { isAuth: false }
+    }
+
+    return { isAuth: true }
+}

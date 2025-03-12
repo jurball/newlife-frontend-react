@@ -2,7 +2,7 @@ import Styles from './Header.module.css';
 import React from "react";
 import Links from "../Links";
 
-export default function Header(props) {
+export default function Header({isAuth}) {
     return (
         <header className={`${Styles.header}`}>
             <nav className={`${Styles.navbar}`}>

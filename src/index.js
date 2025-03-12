@@ -1,24 +1,21 @@
-import React, {useContext} from 'react';
+import React from 'react';
 import ReactDOM from 'react-dom/client';
 import App from './App';
 import {createBrowserRouter, RouterProvider} from "react-router-dom";
-import AuthProvider, {Auth} from "./context/Auth";
 
 import ErrorPage from "./pages/ErrorPage/ErrorPage";
 import Index from "./pages/Index";
-import Cabinet from "./pages/UserPages/CabinetPage/Cabinet";
+import Cabinet, { loader as loaderCabinet } from "./pages/UserPages/CabinetPage/Cabinet";
 import Registration from "./pages/RegistrationPage/Registration";
 import Login from "./pages/LoginPage/Login";
 import PreLoader from "./pages/components/UI/PreLoader/PreLoader";
-import Protect from "./Protect";
+
 
 const router = createBrowserRouter([
     {
         path: "/",
         element: <App />,
         errorElement: <ErrorPage />,
-        loader: null,
-        action: null,
         children: [
             {
                 index: true,
@@ -38,11 +35,11 @@ const router = createBrowserRouter([
             },
             {
                 path: "cabinet",
-                element: <Protect />,
                 children: [
                     {
                         index: true,
                         element: <Cabinet />,
+                        loader: loaderCabinet,
                     },
                     {
                         path: "edit/:id",
@@ -61,8 +58,6 @@ const router = createBrowserRouter([
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-      <AuthProvider>
-          <RouterProvider router={router} />
-      </AuthProvider>
+      <RouterProvider router={router} />
   </React.StrictMode>
 );

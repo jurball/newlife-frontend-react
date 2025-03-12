@@ -1,10 +1,20 @@
-import React, {useContext, useEffect, useState} from 'react';
+import React, {useContext, useState} from 'react';
 import { Auth } from '../../../context/Auth';
-import {Navigate, useNavigate} from "react-router-dom";
+import {Navigate, useLoaderData, useNavigate} from "react-router-dom";
 import Styles from './Cabinet.module.css';
-import {logoutFetch} from "../../../api/api-utils";
+import {deleteToken, hasToken, logoutFetch} from "../../../api/api-utils";
+
+export async function loader() {
+    return hasToken();
+}
 
 export default function Cabinet() {
+    const { isAuth } = useLoaderData();
+
+    if (!isAuth) {
+        return <Navigate to="/login" replace />
+    }
+
     return (
             <main>
                 <ButtonLogout />
@@ -55,13 +65,14 @@ function SharedFiles(props) {
 
 function ButtonLogout(props) {
     const { setAuth } = useContext(Auth);
+    const navigate = useNavigate();
 
     async function logout() {
         const [data, code] = await logoutFetch(localStorage.getItem('token'));
         console.log(data, code);
+        deleteToken();
         setAuth(false);
-        localStorage.removeItem('token');
-        return <Navigate to="/login" replace />;
+        navigate('/login');
     }
 
     return (

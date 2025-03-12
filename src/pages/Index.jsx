@@ -1,6 +1,6 @@
 import React from 'react';
 
-function Index(props) {
+function Index() {
     return (
         <main>
             <h1>Основная страница</h1>
