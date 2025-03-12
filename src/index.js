@@ -1,17 +1,18 @@
-import React from 'react';
+import React, {Suspense} from 'react';
 import ReactDOM from 'react-dom/client';
 import App from './App';
-import {createBrowserRouter, RouterProvider} from "react-router-dom";
+import {createBrowserRouter} from "react-router-dom";
 
 import ErrorPage from "./pages/ErrorPage/ErrorPage";
 import Index from "./pages/Index";
 import Cabinet, { loader as loaderCabinet } from "./pages/UserPages/CabinetPage/Cabinet";
 import Registration from "./pages/RegistrationPage/Registration";
-import Login from "./pages/LoginPage/Login";
 import PreLoader from "./pages/components/UI/PreLoader/PreLoader";
 
+const Login = React.lazy(() => import("./pages/LoginPage/Login") );
+const Route = React.lazy(() => import("./Route"));
 
-const router = createBrowserRouter([
+const router =  createBrowserRouter([
     {
         path: "/",
         element: <App />,
@@ -27,7 +28,10 @@ const router = createBrowserRouter([
             },
             {
                 path: "login",
-                element: <Login />,
+                element:
+                    <Suspense fallback={<PreLoader /> }>
+                        <Login />
+                    </Suspense>,
             },
             {
                 path: "loader",
@@ -58,6 +62,8 @@ const router = createBrowserRouter([
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-      <RouterProvider router={router} />
+      <Suspense fallback={<PreLoader />}>
+          <Route router={router}/>
+      </Suspense>
   </React.StrictMode>
 );

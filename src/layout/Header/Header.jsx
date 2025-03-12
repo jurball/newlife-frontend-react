@@ -1,8 +1,8 @@
 import Styles from './Header.module.css';
 import React from "react";
-import Links from "../Links";
+const Links = React.lazy(() => import('../Links'));
 
-export default function Header({isAuth}) {
+export default function Header() {
     return (
         <header className={`${Styles.header}`}>
             <nav className={`${Styles.navbar}`}>

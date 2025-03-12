@@ -2,15 +2,18 @@ import React, {useContext, useState} from 'react';
 import { Auth } from '../../../context/Auth';
 import {Navigate, useLoaderData, useNavigate} from "react-router-dom";
 import Styles from './Cabinet.module.css';
-import {deleteToken, hasToken, logoutFetch} from "../../../api/api-utils";
+import {deleteToken, fetchData, getData, hasToken, logoutFetch} from "../../../api/api-utils";
+import { endpoint } from "../../../api/endpoint";
 
 export async function loader() {
-    return hasToken();
+    const token = localStorage.getItem('token')
+
+    return { isAuth: hasToken() };
 }
 
 export default function Cabinet() {
-    const { isAuth } = useLoaderData();
-
+    const {isAuth} = useLoaderData();
+console.log(isAuth);
     if (!isAuth) {
         return <Navigate to="/login" replace />
     }

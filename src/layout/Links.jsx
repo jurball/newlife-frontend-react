@@ -1,9 +1,36 @@
+import React, {useContext} from 'react';
+import {NavLink} from "react-router-dom";
 import {Auth} from "../context/Auth";
-import {useContext} from "react";
 
 function Links(props) {
-    const { links } = useContext(Auth);
-    return links;
+    const { isAuth } = useContext(Auth);
+
+    if (isAuth) {
+        return (
+            <>
+                <li>
+                    <NavLink to="/">Index</NavLink>
+                </li>
+                <li>
+                    <NavLink to="/cabinet">Cabinet</NavLink>
+                </li>
+            </>
+        );
+    }
+
+    return (
+        <>
+            <li>
+                <NavLink to="/">Index</NavLink>
+            </li>
+            <li>
+                <NavLink to="/registration">Registration</NavLink>
+            </li>
+            <li>
+                <NavLink to="/login">Login</NavLink>
+            </li>
+        </>
+    );
 }
 
 export default Links;

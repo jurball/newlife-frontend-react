@@ -49,6 +49,8 @@ export async function logoutFetch(token) {
     return [data, code];
 }
 
+
+
 export const getToken = () => {
     if (document.cookie === '') {
         return localStorage.getItem('token');

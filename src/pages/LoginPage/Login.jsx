@@ -1,5 +1,5 @@
 import {Link, useNavigate} from "react-router-dom";
-import React, {useContext, useState} from "react";
+import React, {Suspense, useContext, useState} from "react";
 
 import {fetchData, setToken} from "../../api/api-utils";
 import {endpoint} from "../../api/endpoint";
@@ -7,10 +7,10 @@ import {endpoint} from "../../api/endpoint";
 import InputField from "../components/UI/Form/InputField";
 import ValidationError from "../components/UI/Form/ValidationError";
 import {Auth} from "../../context/Auth";
+import PreLoader from "../components/UI/PreLoader/PreLoader";
 
 export default function Login() {
-    const { isAuth } = useContext(Auth);
-    const { setAuth } = useContext(Auth);
+    const { isAuth, setAuth } = useContext(Auth);
     const navigate = useNavigate();
 
     const [loading, setLoading] = useState(false);
@@ -32,6 +32,7 @@ export default function Login() {
         setError({});
         setMessage({});
         setLoading(true);
+
         const [data] = await fetchData("POST", endpoint.authorization, {
             'Content-Type': 'application/json'
         }, body);
@@ -56,31 +57,33 @@ export default function Login() {
 
     return (
         <main>
-            <form onSubmit={handleForm}>
-                <h1>Авторизация</h1>
-                <InputField
-                    label="E-mail"
-                    type="email"
-                    name="email"
-                    value={body.email}
-                    placeholder="Enter email"
-                    onChange={handleChange}
-                    error={error.email}
-                />
-                <InputField
-                    label="Password"
-                    type="password"
-                    name="password"
-                    value={body.password}
-                    placeholder="Enter password"
-                    onChange={handleChange}
-                    error={error.password}
-                />
-                <button type="submit">Send</button>
-                <Link to="/registration">Регистрация</Link>
-                <ValidationError message={message} />
-                {loading && <div>Загрузка...</div>}
-            </form>
+            <Suspense fallback={<PreLoader/>}>
+                <form onSubmit={handleForm}>
+                    <h1>Авторизация</h1>
+                    <InputField
+                        label="E-mail"
+                        type="email"
+                        name="email"
+                        value={body.email}
+                        placeholder="Enter email"
+                        onChange={handleChange}
+                        error={error.email}
+                    />
+                    <InputField
+                        label="Password"
+                        type="password"
+                        name="password"
+                        value={body.password}
+                        placeholder="Enter password"
+                        onChange={handleChange}
+                        error={error.password}
+                    />
+                    <button type="submit">Send</button>
+                    <Link to="/registration">Регистрация</Link>
+                    <ValidationError message={message}/>
+                    {loading && <p>Загрузка...</p>}
+                </form>
+            </Suspense>
         </main>
     );
 }
