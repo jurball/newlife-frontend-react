@@ -1,11 +1,11 @@
 import React, {useContext} from 'react';
 import {NavLink} from "react-router-dom";
-import {Auth} from "../context/Auth";
+import {Auth} from "../../context/Auth";
 
-function Links(props) {
-    // const { isAuth } = useContext(Auth);
+function Links() {
+    const { isAuth } = useContext(Auth);
 
-    if (props.isAuth) {
+    if (isAuth) {
         return (
             <>
                 <li>
@@ -13,6 +13,12 @@ function Links(props) {
                 </li>
                 <li>
                     <NavLink to="/cabinet">Cabinet</NavLink>
+                </li>
+                <li>
+                    <NavLink to="/registration">Registration</NavLink>
+                </li>
+                <li>
+                    <NavLink to="/login">Login</NavLink>
                 </li>
             </>
         );
@@ -28,6 +34,9 @@ function Links(props) {
             </li>
             <li>
                 <NavLink to="/login">Login</NavLink>
+            </li>
+            <li>
+                <NavLink to="/cabinet">Cabinet</NavLink>
             </li>
         </>
     );

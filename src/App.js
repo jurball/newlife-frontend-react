@@ -1,37 +1,21 @@
 import './App.css';
-import React, {useEffect} from "react";
-import {Outlet, useLocation} from "react-router-dom";
-import {useLoaderData} from "react-router-dom";
+import React from "react";
+import {Outlet} from "react-router-dom";
 
-import Header from './layout/Header/Header';
-import Footer from './layout/Footer/Footer';
-import AuthProvider from "./context/Auth";
-import {getToken} from "./api/api-utils";
+import Header from './components/layout/Header/Header';
+import Footer from './components/layout/Footer/Footer';
 
-export async function loader() {
-    const token = getToken();
+import {checkToken} from "./api/api-utils";
 
-    if (token) {
-        return { isAuth: true };
-    }
-
-
-    return { isAuth: false };
-}
+export const loader = async () => await checkToken();
 
 function App() {
-    // const { isAuth } = useLoaderData();
-    // const isAuth = false;
-
-
     return (
-        <AuthProvider>
-            <Header   />
-            <main>
-                <Outlet/>
-            </main>
+        <>
+            <Header  />
+            <Outlet/>
             <Footer />
-        </AuthProvider>
+        </>
     );
 }
 

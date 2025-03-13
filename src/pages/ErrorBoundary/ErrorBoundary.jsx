@@ -1,7 +1,7 @@
-import Styles from './ErrorPage.module.css';
-import {Link, useRouteError} from "react-router-dom";
+import Styles from './ErrorBoundary.module.css';
+import {useRouteError} from "react-router-dom";
 
-export default function ErrorPage() {
+export default function ErrorBoundary() {
     const error = useRouteError();
     console.error(error);
 
@@ -13,7 +13,6 @@ export default function ErrorPage() {
                 <p className={`${Styles.subtext}`}>
                     <i>{error.statusText || error.message} {error.status}</i>
                 </p>
-                <Link className={`${Styles.link}`} to="/">Перейти на главную</Link>
             </div>
         </main>
     );

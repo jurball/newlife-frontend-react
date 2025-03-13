@@ -1,24 +1,25 @@
-import React, {useContext, useState} from 'react';
-import { Auth } from '../../../context/Auth';
-import {Navigate, useLoaderData, useNavigate} from "react-router-dom";
 import Styles from './Cabinet.module.css';
-import {deleteToken, getToken, logoutFetch} from "../../../api/api-utils";
+import React, {useContext, useState} from 'react';
+import {Navigate, useLoaderData, useNavigate} from "react-router-dom";
+
+import { Auth } from '../../context/Auth';
+import {deleteToken, getToken, logoutFetch} from "../../api/api-utils";
 
 export async function loader() {
-    const token = getToken();
-
-    if (token) {
-        return { isAuth: true };
-    }
+    // const token = getToken();
+    //
+    // if (token) {
+    //     return { isAuth: true };
+    // }
     return { isAuth: false };
 }
 
 export default function Cabinet() {
-    const { isAuth } = useLoaderData();
-
-    if(!isAuth) {
-        return <Navigate to="/login" replace/>
-    }
+    // const { isAuth } = useLoaderData();
+    //
+    // if(!isAuth) {
+    //     return <Navigate to="/login" replace/>
+    // }
 
     return (
             <main>
@@ -53,6 +54,7 @@ function FormUpload(props) {
 }
 
 function UserFiles(props) {
+    // eslint-disable-next-line no-unused-vars
     const [files, setFiles] = useState();
 
     return (
@@ -61,6 +63,7 @@ function UserFiles(props) {
 }
 
 function SharedFiles(props) {
+    // eslint-disable-next-line no-unused-vars
     const [sharedFiles, setSharedFiles] = useState();
 
     return (

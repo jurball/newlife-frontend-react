@@ -1,4 +1,4 @@
-import {endpoint} from "./endpoint";
+import {base_url, endpoint} from "./endpoint";
 
 /**
  * The fetchData
@@ -77,4 +77,30 @@ export const hasToken = () => {
     }
 
     return { isAuth: true }
+}
+
+export async function checkToken() {
+    if (localStorage.getItem("token")) {
+        return { isAuth: false, json: {} };
+    }
+
+    const response = await fetch(`${base_url}/files/check`, {
+        method: "GET",
+        headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${localStorage.getItem("token")}`,
+        }
+    }).catch(() => {
+        throw new Response("", {
+            status: 500,
+            statusText: "Internal Server Error",
+        });
+    });
+
+    const json = await response.json();
+    if (response.status === 404) {
+        return { isAuth: true, json: json};
+    }
+
+    return { isAuth: false, json: json };
 }
