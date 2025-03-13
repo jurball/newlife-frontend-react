@@ -1,33 +1,17 @@
-import {Link, Navigate, useLoaderData, useNavigate} from "react-router-dom";
-import React, {useContext, useState} from "react";
+import {Link, Navigate} from "react-router-dom";
+import React, {useState} from "react";
 
-import {fetchData, setToken} from "../../api/api-utils";
+import {fetchData} from "../../api/api-utils";
 import {endpoint} from "../../api/endpoint";
 
 import InputField from "../../components/UI/Form/InputField";
 import ValidationError from "../../components/UI/Form/ValidationError";
-import {Auth} from "../../context/Auth";
 import Preloader from "../../components/UI/Preloader/Preloader";
 
-export async function loader() {
-    // const res = await fetch('http://localhost:8000/files/check', {
-    //     method: 'GET',
-    //     headers: {
-    //         Authorization: `Bearer ${localStorage.getItem('token')}`,
-    //     }
-    // })
-    // if (res.status === 404) {
-    //     return { isAuth: true };
-    // }
-
-    return { isAuth: false };
-
-}
+import {useAuth} from "../../context/Auth";
 
 export default function Login() {
-    const { isAuth } = useLoaderData();
-    const { setAuth } = useContext(Auth);
-    const navigate = useNavigate();
+    const { isAuth, login } = useAuth();
 
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState({});
@@ -42,7 +26,6 @@ export default function Login() {
         setBody({ ...body, [e.target.name]: e.target.value });
         setError({ ...error, [e.target.name]: "" });
     }
-
 
     async function handleForm(e) {
         e.preventDefault();
@@ -63,9 +46,10 @@ export default function Login() {
             setMessage({ status: data.message });
             setError(data.message);
         } else if (data.success) {
-            setToken(data.token);
-            setAuth(true);
-            navigate('/cabinet');
+            const result = login(data.token);
+            if (typeof result === "object") {
+                setMessage(result)
+            }
         } else {
             setMessage({ status: data.message });
         }
@@ -73,32 +57,30 @@ export default function Login() {
     }
 
     return (
-        <main>
-            <form onSubmit={handleForm}>
-                <h1>Авторизация</h1>
-                <InputField
-                    label="E-mail"
-                    type="email"
-                    name="email"
-                    value={body.email}
-                    placeholder="Enter email"
-                    onChange={handleChange}
-                    error={error.email}
-                />
-                <InputField
-                    label="Password"
-                    type="password"
-                    name="password"
-                    value={body.password}
-                    placeholder="Enter password"
-                    onChange={handleChange}
-                    error={error.password}
-                />
-                <button type="submit">Send</button>
-                <Link to="/registration">Регистрация</Link>
-                <ValidationError message={message}/>
-                {loading && <Preloader />}
-            </form>
-        </main>
+        <form onSubmit={handleForm}>
+            <h1>Авторизация</h1>
+            <InputField
+                label="E-mail"
+                type="email"
+                name="email"
+                value={body.email}
+                placeholder="Enter email"
+                onChange={handleChange}
+                error={error.email}
+            />
+            <InputField
+                label="Password"
+                type="password"
+                name="password"
+                value={body.password}
+                placeholder="Enter password"
+                onChange={handleChange}
+                error={error.password}
+            />
+            <button type="submit">Send</button>
+            <Link to="/registration">Регистрация</Link>
+            <ValidationError message={message}/>
+            {loading && <Preloader />}
+        </form>
     );
 }

@@ -1,4 +1,4 @@
-import {Link, Navigate, useLoaderData, useNavigate} from "react-router-dom";
+import {Link, Navigate, useNavigate} from "react-router-dom";
 import React, {useState} from "react";
 
 import {fetchData} from "../../api/api-utils";
@@ -8,24 +8,11 @@ import ValidationError from "../../components/UI/Form/ValidationError";
 import InputField from "../../components/UI/Form/InputField";
 import Preloader from "../../components/UI/Preloader/Preloader";
 
-export async function loader() {
-    // const res = await fetch('http://localhost:8000/files/check', {
-    //     method: 'GET',
-    //     headers: {
-    //         Authorization: `Bearer ${localStorage.getItem('token')}`,
-    //     }
-    // });
-    //
-    // if (res.status === 404) {
-    //     return { isAuth: false };
-    // }
-
-    return { isAuth: false };
-}
+import {useAuth} from "../../context/Auth";
 
 export default function Registration() {
+    const { isAuth } = useAuth();
     const navigate = useNavigate();
-    const { isAuth } = useLoaderData();
 
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState({});
@@ -55,8 +42,6 @@ export default function Registration() {
             'Content-Type': 'application/json'
         }, body);
 
-        console.log(data);
-
         if (!data.success && typeof data.message === "object") {
             setError(data.message);
             setMessage(data.message);
@@ -69,50 +54,48 @@ export default function Registration() {
     }
 
     return (
-        <main>
-            <form onSubmit={handleForm}>
-                <h1>Регистрация</h1>
-                <InputField
-                    label="Имя"
-                    type="text"
-                    name="first_name"
-                    value={body.first_name}
-                    placeholder="Enter first name"
-                    onChange={handleChange}
-                    error={error.first_name}
-                />
-                <InputField
-                    label="Фамилия"
-                    type="text"
-                    name="last_name"
-                    value={body.last_name}
-                    placeholder="Enter last name"
-                    onChange={handleChange}
-                    error={error.last_name}
-                />
-                <InputField
-                    label="E-mail"
-                    type="email"
-                    name="email"
-                    value={body.email}
-                    placeholder="Enter email"
-                    onChange={handleChange}
-                    error={error.email}
-                />
-                <InputField
-                    label="Password"
-                    type="password"
-                    name="password"
-                    value={body.password}
-                    placeholder="Enter password"
-                    onChange={handleChange}
-                    error={error.password}
-                />
-                <button type="submit">Send</button>
-                <Link to="/login">Войти</Link>
-                <ValidationError message={message} />
-                {loading && <Preloader />}
-            </form>
-        </main>
+        <form onSubmit={handleForm}>
+            <h1>Регистрация</h1>
+            <InputField
+                label="Имя"
+                type="text"
+                name="first_name"
+                value={body.first_name}
+                placeholder="Enter first name"
+                onChange={handleChange}
+                error={error.first_name}
+            />
+            <InputField
+                label="Фамилия"
+                type="text"
+                name="last_name"
+                value={body.last_name}
+                placeholder="Enter last name"
+                onChange={handleChange}
+                error={error.last_name}
+            />
+            <InputField
+                label="E-mail"
+                type="email"
+                name="email"
+                value={body.email}
+                placeholder="Enter email"
+                onChange={handleChange}
+                error={error.email}
+            />
+            <InputField
+                label="Password"
+                type="password"
+                name="password"
+                value={body.password}
+                placeholder="Enter password"
+                onChange={handleChange}
+                error={error.password}
+            />
+            <button type="submit">Send</button>
+            <Link to="/login">Войти</Link>
+            <ValidationError message={message} />
+            {loading && <Preloader />}
+        </form>
     );
 }

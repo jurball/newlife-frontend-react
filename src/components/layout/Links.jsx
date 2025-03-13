@@ -1,5 +1,6 @@
 import React, {useContext} from 'react';
 import {NavLink} from "react-router-dom";
+
 import {Auth} from "../../context/Auth";
 
 function Links() {
@@ -13,12 +14,6 @@ function Links() {
                 </li>
                 <li>
                     <NavLink to="/cabinet">Cabinet</NavLink>
-                </li>
-                <li>
-                    <NavLink to="/registration">Registration</NavLink>
-                </li>
-                <li>
-                    <NavLink to="/login">Login</NavLink>
                 </li>
             </>
         );
@@ -34,9 +29,6 @@ function Links() {
             </li>
             <li>
                 <NavLink to="/login">Login</NavLink>
-            </li>
-            <li>
-                <NavLink to="/cabinet">Cabinet</NavLink>
             </li>
         </>
     );

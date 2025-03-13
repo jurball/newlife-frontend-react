@@ -3,15 +3,14 @@ import ReactDOM from 'react-dom/client';
 import App, { loader as appLoader }  from './App';
 import {createBrowserRouter, RouterProvider} from "react-router-dom";
 
-import AuthProvider from "./context/Auth";
 import Preloader from "./components/UI/Preloader/Preloader";
 
 import NotFound from "./pages/NotFound/NotFound";
 import ErrorBoundary from "./pages/ErrorBoundary/ErrorBoundary";
 import Index from "./pages/Index/Index";
-import Registration, { loader as registrationLoader } from "./pages/Registration/Registration";
-import Login, {loader as loginLoader} from "./pages/Login/Login";
-import Cabinet, { loader as loaderCabinet } from "./pages/Cabinet/Cabinet";
+import Registration from "./pages/Registration/Registration";
+import Login from "./pages/Login/Login";
+import Cabinet, {loader as cabinetLoader, action as cabinetAction } from "./pages/Cabinet/Cabinet";
 
 const router =  createBrowserRouter([
     {
@@ -22,7 +21,7 @@ const router =  createBrowserRouter([
         hydrateFallbackElement: <Preloader/>,
         children: [
             {
-                // hydrateFallbackElement: <Preloader/>,
+                hydrateFallbackElement: <Preloader/>,
                 errorElement: <ErrorBoundary />,
                 children: [
                     {
@@ -32,18 +31,16 @@ const router =  createBrowserRouter([
                     {
                         path: "registration",
                         element: <Registration />,
-                        loader: registrationLoader,
                     },
                     {
                         path: "login",
                         element: <Login />,
-                        loader: loginLoader,
-                        // hydrateFallbackElement: <Preloader/>,
                     },
                     {
                         path: "cabinet",
                         element: <Cabinet/>,
-                        loader: loaderCabinet,
+                        loader: cabinetLoader,
+                        action: cabinetAction,
                     },
                     {
                         path: "cabinet/:fileId/edit",
@@ -70,8 +67,6 @@ const router =  createBrowserRouter([
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-      <AuthProvider>
-          <RouterProvider router={router} future={{ v7_startTransition: true }} />
-      </AuthProvider>
+      <RouterProvider router={router} future={{ v7_startTransition: true }} />
   </React.StrictMode>
 );

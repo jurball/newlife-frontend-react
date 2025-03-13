@@ -3,10 +3,10 @@ import {useRouteError} from "react-router-dom";
 
 export default function ErrorBoundary() {
     const error = useRouteError();
-    console.error(error);
+    // console.error(error);
 
     return (
-        <main>
+        <>
             <div className={`${Styles.errorPage}`}>
                 <h1 className={`${Styles.title}`}>Oops!</h1>
                 <p className={`${Styles.text}`}>Sorry, an unexpected error has occurred.</p>
@@ -14,6 +14,6 @@ export default function ErrorBoundary() {
                     <i>{error.statusText || error.message} {error.status}</i>
                 </p>
             </div>
-        </main>
+        </>
     );
 }

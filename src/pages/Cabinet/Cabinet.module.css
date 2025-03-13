@@ -1,5 +1,10 @@
 .buttonRight {
     float: right;
+    transition: 500ms background-color ease;
+}
+
+.buttonRight:hover {
+    background-color: #818181;
 }
 
 .formUpload {

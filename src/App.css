@@ -10,12 +10,15 @@
     flex-direction: column;
 }
 
-main {
+main  {
     flex: 1 0 auto;
     margin: 0 auto;
     width: 100%;
     max-width: 1300px;
     padding: 30px 60px;
+}
+
+main > * {
     animation: fadein 500ms ease;
 }
 

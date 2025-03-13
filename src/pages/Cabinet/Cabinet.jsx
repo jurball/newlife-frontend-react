@@ -1,89 +1,116 @@
 import Styles from './Cabinet.module.css';
-import React, {useContext, useState} from 'react';
-import {Navigate, useLoaderData, useNavigate} from "react-router-dom";
+import React, {useState} from 'react';
+import {Form, Navigate, useLoaderData} from "react-router-dom";
 
-import { Auth } from '../../context/Auth';
-import {deleteToken, getToken, logoutFetch} from "../../api/api-utils";
+import {useAuth} from '../../context/Auth';
+import {endpoint} from "../../api/endpoint";
+import {deleteToken} from "../../api/api-utils";
 
 export async function loader() {
-    // const token = getToken();
-    //
-    // if (token) {
-    //     return { isAuth: true };
-    // }
-    return { isAuth: false };
+    try {
+        const response = await fetch(endpoint.disk, {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${localStorage.getItem("token")}`,
+            }
+        });
+
+        if (response.ok) {
+            const json = await response.json();
+            return { json: json };
+        }
+
+        if (response.status === 403) {
+            return { json: {} };
+        }
+
+        throw new Error("");
+    } catch (e) {
+        throw new Response("", {
+            status: 500,
+            statusText: "Internal Server Error",
+        });
+    }
+}
+
+export async function action() {
+
 }
 
 export default function Cabinet() {
-    // const { isAuth } = useLoaderData();
-    //
-    // if(!isAuth) {
-    //     return <Navigate to="/login" replace/>
-    // }
+    const { isAuth } = useAuth();
+    const { json } = useLoaderData();
+
+    const [files, setFiles] = useState(json);
+    const [shared, setShared] = useState();
+
+    if (!isAuth) {
+        deleteToken();
+        return <Navigate to="/login" replace />
+    }
+
+    console.log(json);
 
     return (
-            <main>
-                <ButtonLogout />
-                <FilesControl />
-            </main>
+        <div className={`${Styles.content}`}>
+            <ButtonLogout/>
+            <Form method="post" className={`${Styles.formUpload}`}>
+                <h1>Загрузить файл</h1>
+                <input type="file" name="files[]" className={`${Styles.fileUpload}`} multiple/>
+                <button type="submit">Submit</button>
+            </Form>
+            <UserFiles files={files} />
+            <SharedFiles shared={shared} />
+        </div>
     );
 }
 
-function FilesControl(props) {
+function UserFiles(props) {
+    if (!Array.isArray(props.files)) {
+        return null;
+    }
+
+    if (!props.files.length > 0) {
+        return null;
+    }
+
     return (
-        <div className={`${Styles.content}`}>
-            <FormUpload/>
-            <UserFiles/>
-            <SharedFiles/>
+        <div>
+            <h1>Ваши файлы</h1>
+            {props.files && props.files.map((file, index) => (
+                <BoxFile file={file} key={index} />
+            ))}
         </div>
     )
 }
 
-function FormUpload(props) {
-    async function handleSubmit(e) {
-        e.preventDefault();
-    }
-
-    return (
-        <form onSubmit={handleSubmit} className={`${Styles.formUpload}`}>
-            <h1>Загрузить файл</h1>
-            <input type="file" name="files[]" className={`${Styles.fileUpload}`} multiple/>
-            <button type="submit">Submit</button>
-        </form>
-    )
-}
-
-function UserFiles(props) {
-    // eslint-disable-next-line no-unused-vars
-    const [files, setFiles] = useState();
-
-    return (
-        files && <h1>Ваши файлы</h1>
-    )
-}
-
 function SharedFiles(props) {
-    // eslint-disable-next-line no-unused-vars
-    const [sharedFiles, setSharedFiles] = useState();
-
-    return (
-        sharedFiles && <h1>Доступные файлы</h1>
-    )
-}
-
-function ButtonLogout(props) {
-    const { setAuth } = useContext(Auth);
-    const navigate = useNavigate();
-
-    async function logout() {
-        const [data, code] = await logoutFetch(localStorage.getItem('token'));
-        console.log(data, code);
-        deleteToken();
-        setAuth(false);
-        navigate('/login');
+    if (!Array.isArray(props.shared)) {
+        return null;
     }
 
+    if (!props.shared.length > 0) {
+        return null;
+    }
+
+    return (<h1>Доступные файлы</h1>);
+}
+
+function ButtonLogout() {
+    const { logout } = useAuth();
+    return <button className={`${Styles.buttonRight}`} onClick={() => logout()}>Выйти</button>;
+}
+
+function BoxFile(props) {
+    console.log(props.file);
+
     return (
-        <button className={`${Styles.buttonRight}`} onClick={logout}>Выйти</button>
+        <div>
+            <p>Имя файла: {props.file.name}</p>
+            <button>Скачать файл</button>
+            <button>Удалить файл</button>
+            {/*здесь надо вместо кнопок поставить кнопочки*/}
+        </div>
     )
 }
