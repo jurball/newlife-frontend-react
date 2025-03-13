@@ -1,37 +1,35 @@
 import Styles from './Cabinet.module.css';
-import React, {useState} from 'react';
+import React, {useState, Suspense} from 'react';
 import {Form, Navigate, useLoaderData} from "react-router-dom";
+
+import Preloader from "../../components/UI/Preloader/Preloader";
 
 import {useAuth} from '../../context/Auth';
 import {endpoint} from "../../api/endpoint";
 import {deleteToken} from "../../api/api-utils";
 
 export async function loader() {
-    try {
-        const response = await fetch(endpoint.disk, {
-            method: "GET",
-            headers: {
-                "Content-Type": "application/json",
-                "Authorization": `Bearer ${localStorage.getItem("token")}`,
-            }
-        });
-
-        if (response.ok) {
-            const json = await response.json();
-            return { json: json };
+    const response = await fetch(endpoint.disk, {
+        method: "GET",
+        headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${localStorage.getItem("token")}`,
         }
+    });
 
-        if (response.status === 403) {
-            return { json: {} };
-        }
-
-        throw new Error("");
-    } catch (e) {
-        throw new Response("", {
-            status: 500,
-            statusText: "Internal Server Error",
-        });
+    if (response.ok) {
+        const json = await response.json();
+        return { json: json };
     }
+
+    if (response.status === 403) {
+        return { json: {} };
+    }
+
+    throw new Response("", {
+        status: 500,
+        statusText: "Internal Server Error",
+    });
 }
 
 export async function action() {
@@ -39,8 +37,8 @@ export async function action() {
 }
 
 export default function Cabinet() {
-    const { isAuth } = useAuth();
     const { json } = useLoaderData();
+    const { isAuth } = useAuth();
 
     const [files, setFiles] = useState(json);
     const [shared, setShared] = useState();
@@ -78,9 +76,11 @@ function UserFiles(props) {
     return (
         <div>
             <h1>Ваши файлы</h1>
-            {props.files && props.files.map((file, index) => (
-                <BoxFile file={file} key={index} />
-            ))}
+            <Suspense fallback={<Preloader/>}>
+                {props.files && props.files.map((file, index) => (
+                    <BoxFile file={file} key={index} />
+                ))}
+            </Suspense>
         </div>
     )
 }
@@ -94,12 +94,16 @@ function SharedFiles(props) {
         return null;
     }
 
-    return (<h1>Доступные файлы</h1>);
-}
-
-function ButtonLogout() {
-    const { logout } = useAuth();
-    return <button className={`${Styles.buttonRight}`} onClick={() => logout()}>Выйти</button>;
+    return (
+        <div>
+            <h1>Доступные файлы</h1>
+            <Suspense fallback={<Preloader/>}>
+                {props.files && props.files.map((file, index) => (
+                    <BoxFile file={file} key={index}/>
+                ))}
+            </Suspense>
+        </div>
+    );
 }
 
 function BoxFile(props) {
@@ -113,4 +117,9 @@ function BoxFile(props) {
             {/*здесь надо вместо кнопок поставить кнопочки*/}
         </div>
     )
+}
+
+function ButtonLogout() {
+    const { logout } = useAuth();
+    return <button className={`${Styles.buttonRight}`} onClick={() => logout()}>Выйти</button>;
 }

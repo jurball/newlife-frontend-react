@@ -1,23 +1,25 @@
 import './App.css';
 import React from "react";
-import {Outlet, useLoaderData} from "react-router-dom";
+import {Outlet, useLoaderData, useNavigation} from "react-router-dom";
 
 import Header from './components/layout/Header/Header';
 // import Footer from './components/layout/Footer/Footer';
 
 import {checkToken} from "./api/api-utils";
 import AuthProvider from "./context/Auth";
+import Preloader from "./components/UI/Preloader/Preloader";
 
 export const loader = async () => await checkToken();
 
 function App() {
     const { isAuth } = useLoaderData();
+    const navigation = useNavigation();
 
     return (
         <AuthProvider initialState={isAuth}>
             <Header  />
             <main>
-                <Outlet/>
+                {navigation.state === "loading" ? <Preloader/> : <Outlet/>}
             </main>
             {/*<Footer />*/}
         </AuthProvider>
