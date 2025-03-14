@@ -1,65 +1,44 @@
 import Styles from './Cabinet.module.css';
-import React, {useState, Suspense} from 'react';
-import {Form, Navigate, useLoaderData} from "react-router-dom";
+import React, {useState, Suspense, useEffect} from 'react';
+import {Await, Form, Navigate, useFetcher, redirect, useLoaderData, useNavigation} from "react-router-dom";
 
 import Preloader from "../../components/UI/Preloader/Preloader";
 
 import {useAuth} from '../../context/Auth';
-import {endpoint} from "../../api/endpoint";
-import {deleteToken} from "../../api/api-utils";
+import {getFiles} from "../../api/api-utils";
 
 export async function loader() {
-    const response = await fetch(endpoint.disk, {
-        method: "GET",
-        headers: {
-            "Content-Type": "application/json",
-            "Authorization": `Bearer ${localStorage.getItem("token")}`,
-        }
-    });
-
-    if (response.ok) {
-        const json = await response.json();
-        return { json: json };
-    }
-
-    if (response.status === 403) {
-        return { json: {} };
-    }
-
-    throw new Response("", {
-        status: 500,
-        statusText: "Internal Server Error",
-    });
-}
-
-export async function action() {
-
+    return await getFiles(redirect);
 }
 
 export default function Cabinet() {
-    const { json } = useLoaderData();
-    const { isAuth } = useAuth();
+    const context = useAuth();
+    const fetcher = useFetcher();
+    const fetcherForm = useFetcher();
 
-    const [files, setFiles] = useState(json);
-    const [shared, setShared] = useState();
+    useEffect(() => {
+        if (fetcher.state === "idle" && !fetcher.data) {
+            fetcher.load("/cabinet/disk");
+        }
 
-    if (!isAuth) {
-        deleteToken();
-        return <Navigate to="/login" replace />
-    }
+    }, [fetcher]);
 
-    console.log(json);
+    console.log(fetcher.data)
 
     return (
         <div className={`${Styles.content}`}>
             <ButtonLogout/>
-            <Form method="post" className={`${Styles.formUpload}`}>
+            <fetcherForm.Form encType="multipart/form-data" className={`${Styles.formUpload}`}>
                 <h1>Загрузить файл</h1>
                 <input type="file" name="files[]" className={`${Styles.fileUpload}`} multiple/>
                 <button type="submit">Submit</button>
-            </Form>
-            <UserFiles files={files} />
-            <SharedFiles shared={shared} />
+            </fetcherForm.Form>
+            {fetcher.data ?
+                <>
+                    <UserFiles files={fetcher.data.json} />
+                    <SharedFiles shared={fetcher.data.json} />
+                </> :
+            <Preloader />}
         </div>
     );
 }
@@ -107,7 +86,7 @@ function SharedFiles(props) {
 }
 
 function BoxFile(props) {
-    console.log(props.file);
+    // console.log(props.file);
 
     return (
         <div>

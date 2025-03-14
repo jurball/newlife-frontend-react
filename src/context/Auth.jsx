@@ -29,6 +29,7 @@ export default function AuthProvider({ children, initialState }) {
     return (
         <Auth.Provider value={{
             isAuth,
+            setAuth,
             login,
             logout,
         }}>

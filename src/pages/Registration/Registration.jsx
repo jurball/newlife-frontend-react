@@ -14,6 +14,7 @@ export default function Registration() {
     const { isAuth } = useAuth();
     const navigate = useNavigate();
 
+    const [disabled, setDisabled] = useState(false);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState({});
     const [message, setMessage] = useState({});
@@ -35,6 +36,7 @@ export default function Registration() {
 
     async function handleForm(e) {
         e.preventDefault();
+        setDisabled(true);
         setError({});
         setMessage({});
         setLoading(true);
@@ -45,12 +47,15 @@ export default function Registration() {
         if (!data.success && typeof data.message === "object") {
             setError(data.message);
             setMessage(data.message);
+        } else if (data.message === "Failed to fetch") {
+            setMessage({ status: "Ошибка сервера. Попробуйте позже или перегрузите страницу" });
         } else if (data.success) {
             navigate('/login');
         } else {
             setMessage({ status: data.message });
         }
         setLoading(false);
+        setDisabled(false);
     }
 
     return (
@@ -92,7 +97,7 @@ export default function Registration() {
                 onChange={handleChange}
                 error={error.password}
             />
-            <button type="submit">Send</button>
+            <button type="submit" disabled={disabled}>Send</button>
             <Link to="/login">Войти</Link>
             <ValidationError message={message} />
             {loading && <Preloader />}

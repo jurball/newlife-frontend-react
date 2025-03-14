@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import App, { loader as appLoader }  from './App';
-import {createBrowserRouter, RouterProvider} from "react-router-dom";
+import {createBrowserRouter, Navigate, Outlet, RouterProvider} from "react-router-dom";
 
 import Preloader from "./components/UI/Preloader/Preloader";
 
@@ -10,7 +10,7 @@ import ErrorBoundary from "./pages/ErrorBoundary/ErrorBoundary";
 import Index from "./pages/Index/Index";
 import Registration from "./pages/Registration/Registration";
 import Login from "./pages/Login/Login";
-import Cabinet, {loader as cabinetLoader, action as cabinetAction } from "./pages/Cabinet/Cabinet";
+import Cabinet, {loader as cabinetLoader } from "./pages/Cabinet/Cabinet";
 
 const router =  createBrowserRouter([
     {
@@ -39,11 +39,9 @@ const router =  createBrowserRouter([
                     {
                         path: "cabinet",
                         element: <Cabinet/>,
-                        loader: cabinetLoader,
-                        action: cabinetAction,
                     },
                     {
-                        path: "cabinet/:fileId/edit",
+                        path: ":fileId/edit",
                         element: <main><p>Edit</p></main>,
                     },
                     {
@@ -55,7 +53,16 @@ const router =  createBrowserRouter([
                         element: <NotFound />,
                     }
                 ]
-            }
+            },
+            {
+                element: <NotFound />,
+                children: [
+                    {
+                        path: "cabinet/disk",
+                        loader: cabinetLoader,
+                    }
+                ]
+            },
         ]
     },
 ], {

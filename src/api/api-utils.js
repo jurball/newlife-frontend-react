@@ -1,4 +1,4 @@
-import {base_url} from "./endpoint";
+import {base_url, endpoint} from "./endpoint";
 
 /**
  * The fetchData
@@ -19,7 +19,6 @@ export async function fetchData(method = 'POST', url, headers = {}, body = {}) {
 
         return [await response.json(), response.status];
     } catch (error) {
-        console.error(error);
         return [{
             statusCode: error.status,
             message: error.message,
@@ -39,7 +38,7 @@ export async function checkToken() {
                 "Content-Type": "application/json",
                 "Authorization": `Bearer ${localStorage.getItem("token")}`,
             }
-        })
+        });
 
         const json = await response.json();
 
@@ -53,6 +52,41 @@ export async function checkToken() {
             status: 500,
             statusText: "Internal Server Error",
         });
+    }
+}
+
+export async function getFiles(redirect) {
+    try {
+        if(!localStorage.getItem('token')){
+            return redirect('/login')
+        }
+
+        const response = await fetch(endpoint.disk, {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${localStorage.getItem("token")}`,
+            }
+        });
+
+        if (response.ok) {
+            const json = await response.json();
+            return { isAuth: true, json: json };
+        }
+
+        if (response.status === 403) {
+            localStorage.removeItem('token');
+            return redirect('/login');
+        }
+
+        localStorage.removeItem('token');
+        throw new Error("");
+    } catch (e) {
+        throw new Response("", {
+            status: 500,
+            statusText: "Internal Server Error",
+        });
+        return { isAuth: false, json: {} };
     }
 }
 

@@ -10,10 +10,10 @@ function Links() {
         return (
             <>
                 <li>
-                    <NavLink to="/">Index</NavLink>
+                    <NavLink to="/">Главная</NavLink>
                 </li>
                 <li>
-                    <NavLink to="/cabinet">Cabinet</NavLink>
+                    <NavLink to="/cabinet">Кабинет</NavLink>
                 </li>
             </>
         );
@@ -22,13 +22,13 @@ function Links() {
     return (
         <>
             <li>
-                <NavLink to="/">Index</NavLink>
+                <NavLink to="/">Главная</NavLink>
             </li>
             <li>
-                <NavLink to="/registration">Registration</NavLink>
+                <NavLink to="/registration">Регистрация</NavLink>
             </li>
             <li>
-                <NavLink to="/login">Login</NavLink>
+                <NavLink to="/login">Авторизация</NavLink>
             </li>
         </>
     );

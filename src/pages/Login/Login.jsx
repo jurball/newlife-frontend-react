@@ -1,7 +1,7 @@
-import {Link, Navigate} from "react-router-dom";
+import {Link, Navigate, useNavigate, useNavigation} from "react-router-dom";
 import React, {useState} from "react";
 
-import {fetchData} from "../../api/api-utils";
+import {checkToken, fetchData} from "../../api/api-utils";
 import {endpoint} from "../../api/endpoint";
 
 import InputField from "../../components/UI/Form/InputField";
@@ -12,7 +12,9 @@ import {useAuth} from "../../context/Auth";
 
 export default function Login() {
     const { isAuth, login } = useAuth();
+    const navigate = useNavigate();
 
+    const [disabled, setDisabled] = useState(false);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState({});
     const [message, setMessage] = useState({});
@@ -29,11 +31,12 @@ export default function Login() {
 
     async function handleForm(e) {
         e.preventDefault();
+        setDisabled(true);
         setError({});
         setMessage({});
         setLoading(true);
 
-        const [data] = await fetchData("POST", endpoint.authorization, {
+        const [data, code] = await fetchData("POST", endpoint.authorization, {
             'Content-Type': 'application/json'
         }, body);
 
@@ -42,6 +45,8 @@ export default function Login() {
         if (!data.success && typeof data.message === "object") {
             setMessage(data.message);
             setError(data.message);
+        } else if (data.message === "Failed to fetch") {
+            setMessage({ status: "Ошибка сервера. Попробуйте позже или перегрузите страницу" });
         } else if (!data.success && typeof data.message === "string") {
             setMessage({ status: data.message });
             setError(data.message);
@@ -54,6 +59,7 @@ export default function Login() {
             setMessage({ status: data.message });
         }
         setLoading(false);
+        setDisabled(false);
     }
 
     return (
@@ -77,7 +83,7 @@ export default function Login() {
                 onChange={handleChange}
                 error={error.password}
             />
-            <button type="submit">Send</button>
+            <button type="submit" disabled={disabled}>Send</button>
             <Link to="/registration">Регистрация</Link>
             <ValidationError message={message}/>
             {loading && <Preloader />}
