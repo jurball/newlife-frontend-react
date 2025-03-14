@@ -1,6 +1,6 @@
-// export const base_url = 'http://127.0.0.1:8000';
-const apiUrl = process.env.REACT_APP_API_URL;
-export const base_url = `${apiUrl}`;
+export const base_url = 'http://127.0.0.1:8000';
+// const apiUrl = process.env.REACT_APP_API_URL;
+// export const base_url = `${apiUrl}`;
 
 
 export const endpoint = {

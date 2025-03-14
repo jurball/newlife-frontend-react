@@ -14,6 +14,7 @@ export const loader = async () => await checkToken();
 function App() {
     const { isAuth } = useLoaderData();
     const navigation = useNavigation();
+    console.log(`${process.env.REACT_APP_API_URL}`);
 
     return (
         <AuthProvider initialState={isAuth}>
