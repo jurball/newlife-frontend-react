@@ -1,6 +1,6 @@
 import './App.css';
 import React from "react";
-import {Outlet, useLoaderData, useNavigation} from "react-router-dom";
+import {Outlet, useLoaderData} from "react-router-dom";
 
 import Header from './components/layout/Header/Header';
 // import Footer from './components/layout/Footer/Footer';

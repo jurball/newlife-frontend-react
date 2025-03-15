@@ -9,15 +9,10 @@ export default function AuthProvider({ children, initialState }) {
     const [isAuth, setAuth] = useState(initialState);
     const navigate = useNavigate();
 
-    const login = (token = false) => {
-            if (token === false) {
-                return {
-                    "message": "Internal Server Error",
-                }
-            }
-            setToken(token)
-            setAuth(true);
-            navigate('/cabinet');
+    const login = (token) => {
+        setToken(token)
+        setAuth(true);
+        navigate('/cabinet');
     }
 
     const logout = () => {

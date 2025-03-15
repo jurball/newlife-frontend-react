@@ -1,7 +1,7 @@
-import {Link, Navigate, useNavigate, useNavigation} from "react-router-dom";
+import {Link, Navigate} from "react-router-dom";
 import React, {useState} from "react";
 
-import {checkToken, fetchData} from "../../api/api-utils";
+import {fetchData} from "../../api/api-utils";
 import {endpoint} from "../../api/endpoint";
 
 import InputField from "../../components/UI/Form/InputField";
@@ -12,7 +12,6 @@ import {useAuth} from "../../context/Auth";
 
 export default function Login() {
     const { isAuth, login } = useAuth();
-    const navigate = useNavigate();
 
     const [disabled, setDisabled] = useState(false);
     const [loading, setLoading] = useState(false);
@@ -36,7 +35,7 @@ export default function Login() {
         setMessage({});
         setLoading(true);
 
-        const [data, code] = await fetchData("POST", endpoint.authorization, {
+        const [data] = await fetchData("POST", endpoint.authorization, {
             'Content-Type': 'application/json'
         }, body);
 
@@ -51,10 +50,7 @@ export default function Login() {
             setMessage({ status: data.message });
             setError(data.message);
         } else if (data.success) {
-            const result = login(data.token);
-            if (typeof result === "object") {
-                setMessage(result)
-            }
+            login(data.token);
         } else {
             setMessage({ status: data.message });
         }

@@ -27,12 +27,8 @@ export async function fetchData(method = 'POST', url, headers = {}, body = {}) {
 }
 
 export async function checkToken() {
-    // if (!localStorage.getItem("token")) {
-    //     return { isAuth: false, json: {} };
-    // }
-
     try {
-        const response = await fetch(`${base_url}/files/check`, {
+        const response = await fetch(`${base_url}/token`, {
             method: "GET",
             headers: {
                 "Content-Type": "application/json",
@@ -42,7 +38,7 @@ export async function checkToken() {
 
         const json = await response.json();
 
-        if (response.status === 404) {
+        if (response.ok) {
             return { isAuth: true, json: json};
         }
 
@@ -55,12 +51,8 @@ export async function checkToken() {
     }
 }
 
-export async function getFiles(redirect) {
+export async function getFiles() {
     try {
-        if(!localStorage.getItem('token')){
-            return redirect('/login')
-        }
-
         const response = await fetch(endpoint.disk, {
             method: "GET",
             headers: {
@@ -71,22 +63,13 @@ export async function getFiles(redirect) {
 
         if (response.ok) {
             const json = await response.json();
-            return { isAuth: true, json: json };
-        }
-
-        if (response.status === 403) {
-            localStorage.removeItem('token');
-            return redirect('/login');
+            return [true, json];
         }
 
         localStorage.removeItem('token');
-        throw new Error("");
+        return [false, {}];
     } catch (e) {
-        throw new Response("", {
-            status: 500,
-            statusText: "Internal Server Error",
-        });
-        return { isAuth: false, json: {} };
+        console.error(e)
     }
 }
 

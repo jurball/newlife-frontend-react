@@ -6,39 +6,38 @@ import Preloader from "../../components/UI/Preloader/Preloader";
 
 import {useAuth} from '../../context/Auth';
 import {getFiles} from "../../api/api-utils";
+import {useGetFiles} from "../../api/api-hook";
 
 export async function loader() {
     return await getFiles(redirect);
 }
 
 export default function Cabinet() {
-    const context = useAuth();
-    const fetcher = useFetcher();
-    const fetcherForm = useFetcher();
+    const {isAuth} = useAuth();
+    const data = useGetFiles();
 
-    useEffect(() => {
-        if (fetcher.state === "idle" && !fetcher.data) {
-            fetcher.load("/cabinet/disk");
-        }
+    if(!isAuth){
+        return <Navigate to="/login"/>
+    }
 
-    }, [fetcher]);
-
-    console.log(fetcher.data)
+    async function handleSubmit(e) {
+        e.preventDefault();
+        const form = e.target;
+        console.log(form);
+    }
 
     return (
         <div className={`${Styles.content}`}>
             <ButtonLogout/>
-            <fetcherForm.Form encType="multipart/form-data" className={`${Styles.formUpload}`}>
+            <form onSubmit={handleSubmit} encType="multipart/form-data" className={`${Styles.formUpload}`}>
                 <h1>Загрузить файл</h1>
                 <input type="file" name="files[]" className={`${Styles.fileUpload}`} multiple/>
                 <button type="submit">Submit</button>
-            </fetcherForm.Form>
-            {fetcher.data ?
-                <>
-                    <UserFiles files={fetcher.data.json} />
-                    <SharedFiles shared={fetcher.data.json} />
-                </> :
-            <Preloader />}
+            </form>
+            {data ? <>
+                <UserFiles files={data} />
+                <SharedFiles shared={data} />
+            </> : <Preloader />}
         </div>
     );
 }
@@ -86,8 +85,6 @@ function SharedFiles(props) {
 }
 
 function BoxFile(props) {
-    // console.log(props.file);
-
     return (
         <div>
             <p>Имя файла: {props.file.name}</p>
