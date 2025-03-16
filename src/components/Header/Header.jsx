@@ -1,12 +1,13 @@
 import Styles from './Header.module.css';
 import React from "react";
-import Links from '../Links';
+import Links from '../Links/Links';
+import {Link} from "react-router-dom";
 
 export default function Header({ isAuth }) {
     return (
         <header className={`${Styles.header}`}>
             <nav className={`${Styles.navbar}`}>
-                <h1>LOGO</h1>
+                <Link to="/" className={`${Styles.link}`}><h1>NewLife-storage</h1></Link>
                 <ul className={`${Styles.menu}`}>
                     <Links isAuth={isAuth} />
                 </ul>

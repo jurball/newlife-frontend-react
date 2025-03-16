@@ -3,10 +3,6 @@
     transition: 500ms background-color ease;
 }
 
-.buttonRight:hover {
-    background-color: #818181;
-}
-
 .formUpload {
     margin: 60px 0 60px 0;
 }
@@ -15,9 +11,23 @@
     border: 1px solid #6c6c6c;
     border-radius: 5px;
     padding: 40px;
+    width: 100%;
 }
 
 .content {
     max-width: 700px;
     margin: 0 auto;
+}
+
+.box-file {
+    border: 2px solid black;
+    padding: 20px;
+    margin-bottom: 10px;
+    border-radius: 8px;
+}
+
+@media screen and (max-width: 700px) {
+    .content {
+        text-align: center;
+    }
 }

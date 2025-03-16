@@ -1,21 +1,12 @@
-import {base_url, endpoint} from "./endpoint";
+import {endpoint} from "./endpoint";
 
-/**
- * The fetchData
- *
- * @param method string The method
- * @param url string The url
- * @param headers object The headers
- * @param body object The body
- *
- */
 export async function fetchData(method = 'POST', url, headers = {}, body = {}) {
     try {
         const response = await fetch(url, {
             method,
             headers,
             body: JSON.stringify(body),
-        })
+        });
 
         return [await response.json(), response.status];
     } catch (error) {
@@ -28,18 +19,18 @@ export async function fetchData(method = 'POST', url, headers = {}, body = {}) {
 
 export async function checkToken() {
     try {
-        const response = await fetch(`${base_url}/token`, {
+        const response = await fetch(endpoint.token, {
             method: "GET",
             headers: {
                 "Content-Type": "application/json",
-                "Authorization": `Bearer ${localStorage.getItem("token")}`,
+                "Authorization": `Bearer ${getToken()}`,
             }
         });
 
         const json = await response.json();
 
         if (response.ok) {
-            return { isAuth: true, json: json};
+            return { isAuth: true, json: json };
         }
 
         return { isAuth: false, json: json };
@@ -57,7 +48,7 @@ export async function getFiles() {
             method: "GET",
             headers: {
                 "Content-Type": "application/json",
-                "Authorization": `Bearer ${localStorage.getItem("token")}`,
+                "Authorization": `Bearer ${getToken()}`,
             }
         });
 
@@ -66,11 +57,15 @@ export async function getFiles() {
             return [true, json];
         }
 
-        localStorage.removeItem('token');
+        deleteToken();
         return [false, {}];
     } catch (e) {
         console.error(e)
     }
+}
+
+export const getToken = () => {
+    return localStorage.getItem("token");
 }
 
 export const setToken = (token) => {

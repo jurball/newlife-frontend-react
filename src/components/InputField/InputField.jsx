@@ -1,3 +1,4 @@
+import Styles from './InputField.module.css';
 import React from 'react';
 
 function InputField(props) {
@@ -7,7 +8,7 @@ function InputField(props) {
             <input
                 type={props.type}
                 name={props.name}
-                className={`${!props.error && props.value ? "success" : props.error && "is-invalid"}`}
+                className={`${Styles['inputField']} ${!props.error && props.value ? "success" : props.error && "is-invalid"}`}
                 onChange={props.onChange}
                 placeholder={props.placeholder}
                 value={props.value}

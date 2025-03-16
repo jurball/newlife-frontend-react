@@ -5,7 +5,7 @@ function ValidationError(props) {
         textAlign: 'center'
     }
     return (
-        <div className="box-error">
+        <div>
             {props.message && Object.entries(props.message).map(([key, value]) => (
                 <p className="is-invalid-text" style={styles} key={key}>{value}</p>
             ))}

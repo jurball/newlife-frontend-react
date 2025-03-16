@@ -1,16 +1,19 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import App, { loader as appLoader }  from './App';
-import {createBrowserRouter, Navigate, Outlet, RouterProvider} from "react-router-dom";
+import {createBrowserRouter, RouterProvider} from "react-router-dom";
 
-import Preloader from "./components/UI/Preloader/Preloader";
+import Preloader from "./components/Preloader/Preloader";
 
 import NotFound from "./pages/NotFound/NotFound";
 import ErrorBoundary from "./pages/ErrorBoundary/ErrorBoundary";
 import Index from "./pages/Index/Index";
 import Registration from "./pages/Registration/Registration";
 import Login from "./pages/Login/Login";
-import Cabinet, {loader as cabinetLoader } from "./pages/Cabinet/Cabinet";
+import Cabinet from "./pages/Cabinet/Cabinet";
+import Shared from "./pages/Shared/Shared";
+import Edit from "./pages/Edit/Edit";
+import Accesses from "./pages/Accesses/Accesses";
 
 const router =  createBrowserRouter([
     {
@@ -18,10 +21,10 @@ const router =  createBrowserRouter([
         element: <App />,
         loader: appLoader,
         errorElement: <ErrorBoundary />,
-        hydrateFallbackElement: <Preloader/>,
+        hydrateFallbackElement: <Preloader hydrate/>,
         children: [
             {
-                hydrateFallbackElement: <Preloader/>,
+                hydrateFallbackElement: <Preloader hydrate/>,
                 errorElement: <ErrorBoundary />,
                 children: [
                     {
@@ -41,25 +44,20 @@ const router =  createBrowserRouter([
                         element: <Cabinet/>,
                     },
                     {
-                        path: ":fileId/edit",
-                        element: <main><p>Edit</p></main>,
+                        path: "cabinet/:fileId/edit",
+                        element: <Edit/>
                     },
                     {
                         path: "cabinet/:fileId/accesses",
-                        element: <main><p>Add Accesses</p></main>,
+                        element: <Accesses />,
+                    },
+                    {
+                        path: "shared",
+                        element: <Shared/>,
                     },
                     {
                         path: "*",
                         element: <NotFound />,
-                    }
-                ]
-            },
-            {
-                element: <NotFound />,
-                children: [
-                    {
-                        path: "cabinet/disk",
-                        loader: cabinetLoader,
                     }
                 ]
             },

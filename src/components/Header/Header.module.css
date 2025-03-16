@@ -1,4 +1,4 @@
-.footer {
+.header {
     background-color: black;
     color: white;
 }
@@ -17,4 +17,21 @@
     display: flex;
     list-style: none;
     gap: 20px;
+}
+
+.link {
+    color: white;
+}
+
+@media screen and (max-width: 700px) {
+    .navbar {
+        flex-direction: column;
+    }
+
+    .menu {
+        margin-top: 16px;
+        flex-direction: column;
+        gap: 5px;
+        max-width: 194px;
+    }
 }

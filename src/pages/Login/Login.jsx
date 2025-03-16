@@ -1,18 +1,18 @@
-import {Link, Navigate} from "react-router-dom";
+import {Link, Navigate, useNavigate} from "react-router-dom";
 import React, {useState} from "react";
 
 import {fetchData} from "../../api/api-utils";
 import {endpoint} from "../../api/endpoint";
 
-import InputField from "../../components/UI/Form/InputField";
-import ValidationError from "../../components/UI/Form/ValidationError";
-import Preloader from "../../components/UI/Preloader/Preloader";
+import InputField from "../../components/InputField/InputField";
+import ValidationError from "../../components/ValidationError/ValidationError";
+import Preloader from "../../components/Preloader/Preloader";
 
 import {useAuth} from "../../context/Auth";
 
 export default function Login() {
     const { isAuth, login } = useAuth();
-
+    const navigate = useNavigate();
     const [disabled, setDisabled] = useState(false);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState({});
@@ -39,8 +39,6 @@ export default function Login() {
             'Content-Type': 'application/json'
         }, body);
 
-        console.log(data);
-
         if (!data.success && typeof data.message === "object") {
             setMessage(data.message);
             setError(data.message);
@@ -51,6 +49,7 @@ export default function Login() {
             setError(data.message);
         } else if (data.success) {
             login(data.token);
+            navigate('/cabinet');
         } else {
             setMessage({ status: data.message });
         }

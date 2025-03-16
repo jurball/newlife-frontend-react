@@ -1,20 +1,21 @@
+@font-face {
+    font-family: 'Source Sans 3';
+    font-style: normal;
+    font-weight: 100 900;
+    src: url(fonts/SourceSans3.ttf) format('truetype');
+}
+
 * {
     box-sizing: border-box;
     padding: 0;
     margin: 0;
+    font-family: 'Source Sans 3', serif;
 }
 
 #root {
     min-height: 100vh;
     display: flex;
     flex-direction: column;
-}
-
-.loading {
-    background-color: #6c6c6c;
-    width: 400px;
-    height: 50px;
-    position: absolute;
 }
 
 main  {
@@ -25,17 +26,12 @@ main  {
     padding: 30px 60px;
 }
 
-.loadings {
-    opacity: 0.3;
-    transition: 600ms opacity ease;
+span {
+    font-weight: bold;
 }
 
 main > * {
     animation: fadein 500ms ease;
-}
-
-img {
-    color: white;
 }
 
 a {
@@ -47,25 +43,9 @@ a.active {
     text-decoration: underline;
 }
 
-.not_active {
-    text-decoration: none;
-}
-
-ul {
-    list-style-type: none;
-}
-
-li a {
-    color: white;
-    font-weight: bold;
-}
-
-li a:hover {
-    color: #afafaf;
-}
-
 form {
-    margin: 100px 0 0 0;
+    max-width: 900px;
+    margin: 100px auto 0 auto;
     padding: 20px;
 }
 
@@ -77,14 +57,6 @@ form button {
 
 form h1 {
     margin-bottom: 1rem;
-}
-
-input {
-    padding: 10px;
-    margin: 7px 0;
-    width: 100%;
-    outline: none;
-    transition: 1s all ease
 }
 
 button {
@@ -114,9 +86,29 @@ button[disabled] {
     transition: 500ms all ease;
 }
 
+.success-text {
+    color: green;
+    text-align: center;
+}
+
 .is-invalid-text {
     color: red;
     margin: 10px 0;
+}
+
+.box-file {
+    border: 2px solid black;
+    padding: 20px;
+    margin-bottom: 10px;
+    border-radius: 8px;
+}
+
+.danger-button {
+    background-color: #dd2d2d;
+}
+
+.primary-button {
+    background-color: #2d79dd;
 }
 
 @keyframes fadein {
@@ -127,7 +119,17 @@ button[disabled] {
     to {
         opacity: 1;
         transform: translateY(0);
+    }
+}
 
+@media screen and (max-width: 700px) {
+    header {
+        text-align: center;
+        list-style: none;
     }
 
+    button {
+        width: 100%;
+        margin: 10px 0 10px 0;
+    }
 }

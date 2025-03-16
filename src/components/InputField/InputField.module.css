@@ -1,0 +1,8 @@
+.inputField {
+    padding: 10px;
+    margin: 7px 0;
+    width: 100%;
+    outline: none;
+    transition: 1s all ease;
+    text-align: left;
+}

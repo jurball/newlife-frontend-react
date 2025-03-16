@@ -4,9 +4,9 @@ import React, {useState} from "react";
 import {fetchData} from "../../api/api-utils";
 import {endpoint} from "../../api/endpoint";
 
-import ValidationError from "../../components/UI/Form/ValidationError";
-import InputField from "../../components/UI/Form/InputField";
-import Preloader from "../../components/UI/Preloader/Preloader";
+import ValidationError from "../../components/ValidationError/ValidationError";
+import InputField from "../../components/InputField/InputField";
+import Preloader from "../../components/Preloader/Preloader";
 
 import {useAuth} from "../../context/Auth";
 
