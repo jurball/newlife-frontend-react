@@ -1,11 +1,13 @@
 import React from 'react';
-// import Styles from "../ErrorBoundary/ErrorBoundary.module.css";
+import {Link} from "react-router-dom";
+import Styles from "./NotFound.module.css";
 
 function NotFound(props) {
     return (
-        <main>
+        <div className={`${Styles.content}`}>
             <h1>404 Not found</h1>
-        </main>
+            <Link className={`${Styles.link}`} to="/">Назад</Link>
+        </div>
     );
 }
 

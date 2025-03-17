@@ -6,6 +6,6 @@ export const endpoint = {
     logout: `${base_url}/logout`,
     disk: `${base_url}/files/disk`,
     files: `${base_url}/files`,
-    accesses: `${base_url}/accesses`,
+    shared: `${base_url}/files/shared`,
     token: `${base_url}/token`,
 };

@@ -34,7 +34,7 @@ function useGetFiles() {
     return [data, setUpdate];
 }
 
-export function useFoundFile() {
+export function useEditFile() {
     const location = useLocation();
     const [loading, setLoading] = useState(true);
     const [notFound, setNotFound] = useState(false);
@@ -55,10 +55,11 @@ export function useFoundFile() {
                     body: JSON.stringify(body)
                 });
 
+                const json = await response.json()
+
                 if (response.status === 422) {
-                    setData(await response.json());
+                    setData(json);
                 } else if(response.ok) {
-                    const json = await response.json();
                     setData({ status: json.message });
                 } else if (response.status === 403) {
                     setForbidden(true);
@@ -81,8 +82,144 @@ export function useFoundFile() {
     return [loading, forbidden, notFound, data, setBody];
 }
 
-export function useEditFile() {
+export function useAccessesFile() {
+    const location = useLocation();
+    const [loading, setLoading] = useState(true);
+    const [notFound, setNotFound] = useState(false);
+    const [data, setData] = useState();
+    const [forbidden, setForbidden] = useState(false);
+    const [body, setBody] = useState({});
+    const [userNotFound, setUserNotFound] = useState(false);
 
+    useEffect(() => {
+        async function getFile() {
+            try {
+                setLoading(true);
+                setUserNotFound(false);
+                setData();
+
+                const findFile = await fetch(endpoint.files + `/${location.pathname.split('/')[2]}`, {
+                    method: "GET",
+                    headers: {
+                        "Authorization": `Bearer ${getToken()}`,
+                    }
+                })
+
+                if(findFile.status === 404) {
+                    setNotFound(true);
+                    setLoading(false);
+                    return;
+                }
+
+                const response = await fetch(endpoint.files + `/${location.pathname.split('/')[2]}/access`, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Authorization": `Bearer ${getToken()}`,
+                    },
+                    body: JSON.stringify(body)
+                });
+
+                const json = await response.json();
+                console.log(json);
+                console.log(response.status);
+
+                if (response.status === 422) {
+                    setData(json);
+                } else if(response.ok) {
+                    setData({ status: json });
+                } else if (response.status === 403) {
+                    setForbidden(true);
+                } else if (response.status === 404) {
+                    setUserNotFound(json);
+                } else if (response.status === 409) {
+                    setData({ exists: json });
+                }
+                else {
+                    throw new Error("Unknown error");
+                }
+            } catch (error) {
+                console.error(error);
+                alert("Произошла ошибка")
+                window.location.reload();
+            }
+            setLoading(false);
+        }
+
+        getFile();
+    }, [body, location.pathname, setBody]);
+
+    return [loading, forbidden, notFound, userNotFound, data, setBody];
+}
+
+export function useAccessesDeleteFile() {
+    const location = useLocation();
+    const [loading, setLoading] = useState(true);
+    const [notFound, setNotFound] = useState(false);
+    const [data, setData] = useState();
+    const [forbidden, setForbidden] = useState(false);
+    const [body, setBody] = useState({});
+    const [userNotFound, setUserNotFound] = useState(false);
+
+    useEffect(() => {
+        async function getFile() {
+            try {
+                setLoading(true);
+                setUserNotFound(false);
+                setData();
+
+                const findFile = await fetch(endpoint.files + `/${location.pathname.split('/')[2]}`, {
+                    method: "GET",
+                    headers: {
+                        "Authorization": `Bearer ${getToken()}`,
+                    }
+                })
+
+                if(findFile.status === 404) {
+                    setNotFound(true);
+                    setLoading(false);
+                    return;
+                }
+
+                const response = await fetch(endpoint.files + `/${location.pathname.split('/')[2]}/access`, {
+                    method: "DELETE",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Authorization": `Bearer ${getToken()}`,
+                    },
+                    body: JSON.stringify(body)
+                });
+
+                const json = await response.json();
+                console.log(json);
+                console.log(response.status);
+
+                if (response.status === 422) {
+                    setData(json);
+                } else if(response.ok) {
+                    setData({ status: json });
+                } else if (response.status === 403) {
+                    setForbidden(true);
+                } else if (response.status === 404) {
+                    setUserNotFound(json);
+                } else if (response.status === 409) {
+                    setData({ exists: json });
+                }
+                else {
+                    throw new Error("Unknown error");
+                }
+            } catch (error) {
+                console.error(error);
+                alert("Произошла ошибка")
+                window.location.reload();
+            }
+            setLoading(false);
+        }
+
+        getFile();
+    }, [body, location.pathname, setBody]);
+
+    return [loading, forbidden, notFound, userNotFound, data, setBody];
 }
 
 export function useCabinetFiles() {

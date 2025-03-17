@@ -1,5 +1,6 @@
 import React from "react";
-import BoxFile from "../../components/BoxFile/BoxFile";
+import {endpoint} from "../../api/endpoint";
+import {getToken} from "../../api/api-utils";
 
 export default function SharedFiles(props) {
     if (!Array.isArray(props.shared)) {
@@ -10,11 +11,49 @@ export default function SharedFiles(props) {
         return null;
     }
 
+    async function handleClickDownload(id) {
+        try {
+            const response = await fetch(endpoint.files + `/${id}`, {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${getToken()}`,
+                }
+            });
+
+            if (!response.ok) {
+                throw new Error('Ошибка при загрузки файла');
+            }
+
+            const blob = await response.blob();
+            const urls = window.URL.createObjectURL(blob);
+
+            const a = document.createElement('a');
+            a.href = urls;
+
+            const contentDisposition = response.headers.get('Content-Disposition');
+            const fileNameMatch = contentDisposition && contentDisposition.match(/filename="(.+)"/);
+
+            a.download = fileNameMatch ? fileNameMatch[1] : `downloaded_file_${id}`;
+            document.body.appendChild(a);
+
+            a.click();
+            document.body.removeChild(a);
+
+            window.URL.revokeObjectURL(urls);
+        } catch (error) {
+            console.error(error);
+            alert(error.message);
+        }
+    }
+
     return (
-        <div>
-            <h1>Доступные файлы</h1>
-            {props.files && props.files.map((file, index) => (
-                <BoxFile file={file} key={index}/>
+        <div className="box-share">
+            {props.shared.map((shared, key) => (
+                <div className="box-file" key={key}>
+                    <p>Имя: {shared.name}</p>
+                    <button onClick={() => handleClickDownload(shared.file_id)}>Download</button>
+                </div>
             ))}
         </div>
     );

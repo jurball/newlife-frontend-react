@@ -83,12 +83,18 @@ function BoxFile(props) {
         }
     }
 
+    async function handleClickDeleteShare() {
+        navigation.file_id = props.file.file_id;
+        navigate(`/cabinet/${props.file.file_id}/accesses/delete`);
+    }
+
     return (
         <div className="box-file">
             <p>Имя файла: {props.file.name}</p>
             <button onClick={handleClickDownload}>Download</button>
             <button onClick={handleClickEdit}>Edit</button>
             <button onClick={handleClickShare} className="primary-button">Share</button>
+            <button onClick={handleClickDeleteShare} className="danger-button">Delete Share</button>
             <button onClick={handleClickDelete} className="danger-button">Delete</button>
         </div>
     )

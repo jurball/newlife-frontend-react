@@ -1,16 +1,18 @@
 import React from 'react';
-import {Link} from "react-router-dom";
+import {Link, Navigate} from "react-router-dom";
 
-import {useFoundFile} from "../../api/api-hook";
+import {useEditFile} from "../../api/api-hook";
 import NotFound from "../NotFound/NotFound";
 
 import Preloader from "../../components/Preloader/Preloader";
 import ValidationError from "../../components/ValidationError/ValidationError";
 import InputField from "../../components/InputField/InputField";
 import Forbidden from "../Forbidden/Forbidden";
+import {useAuth} from "../../context/Auth";
 
 function Edit() {
-    const [loading, forbidden, notFound, data, setBody] = useFoundFile();
+    const { isAuth } = useAuth();
+    const [loading, forbidden, notFound, data, setBody] = useEditFile();
 
     async function handleSubmit(e) {
         e.preventDefault();
@@ -19,6 +21,7 @@ function Edit() {
         })
     }
 
+    if (!isAuth) return <Navigate to="/login"/>
     if(loading) return <Preloader />;
     if(forbidden) return <Forbidden />;
     if(notFound) return <NotFound />;
@@ -31,7 +34,6 @@ function Edit() {
                     label="Имя файла"
                     name="name"
                     placeholder="Введите новое имя файла"
-                    error={data?.message?.name}
                 />
                 <button type="submit">Отправить</button>
                 <Link to="/cabinet">Назад</Link>

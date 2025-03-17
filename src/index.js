@@ -14,6 +14,7 @@ import Cabinet from "./pages/Cabinet/Cabinet";
 import Shared from "./pages/Shared/Shared";
 import Edit from "./pages/Edit/Edit";
 import Accesses from "./pages/Accesses/Accesses";
+import AccessesDelete from "./pages/Accesses/AccessesDelete";
 
 const router =  createBrowserRouter([
     {
@@ -52,9 +53,14 @@ const router =  createBrowserRouter([
                         element: <Accesses />,
                     },
                     {
+                        path: "cabinet/:fileId/accesses/delete",
+                        element: <AccessesDelete/>,
+                    },
+                    {
                         path: "shared",
                         element: <Shared/>,
                     },
+
                     {
                         path: "*",
                         element: <NotFound />,

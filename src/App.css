@@ -111,6 +111,21 @@ button[disabled] {
     background-color: #2d79dd;
 }
 
+.box-share {
+    max-width: 900px;
+    margin: 0 auto 0 auto;
+}
+
+.shared-container {
+    max-width: 700px;
+    margin: 0 auto;
+}
+
+.box-share button {
+    width: 100%;
+    margin: 10px 0 0 0;
+}
+
 @keyframes fadein {
     from {
         opacity: 0.2;

@@ -1,6 +1,6 @@
 import Styles from './Cabinet.module.css';
 import React from 'react';
-import {Navigate} from "react-router-dom";
+import {Navigate, useNavigate} from "react-router-dom";
 
 import ValidationError from "../../components/ValidationError/ValidationError";
 import Preloader from "../../components/Preloader/Preloader";
@@ -38,10 +38,11 @@ export default function Cabinet() {
 
 function ButtonLogout() {
     const logout = useLogout();
+
     return (
         <button
             className={`${Styles.buttonRight} danger-button`}
-            onClick={() => window.confirm("Вы уверены что хотите выйти?") ? logout() : null }
+            onClick={() => window.confirm("Вы уверены что хотите выйти?") ? logout() : null}
         >
             Выйти
         </button>
