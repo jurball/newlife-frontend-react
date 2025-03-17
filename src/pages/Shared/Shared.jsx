@@ -31,8 +31,8 @@ function Shared() {
 
     return (
         <div className="shared-container">
-            <h1>Список доступных файлов</h1>
-            {!data && !loading && <p>У вас нет доступных файлов</p>}
+            <h1>Shared files</h1>
+            {data?.length === 0 && <p>У вас нет доступных файлов</p>}
             {data ? <SharedFiles shared={data}/> : ""}
             {loading && <FileBone/>}
         </div>

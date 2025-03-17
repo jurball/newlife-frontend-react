@@ -1,6 +1,6 @@
 import Styles from './Cabinet.module.css';
 import React from 'react';
-import {Navigate, useNavigate} from "react-router-dom";
+import {Navigate} from "react-router-dom";
 
 import ValidationError from "../../components/ValidationError/ValidationError";
 import Preloader from "../../components/Preloader/Preloader";

@@ -1,12 +1,7 @@
 .home {
     text-align: left;
-}
-
-.pre {
-    padding: 5px;
-    display: inline;
-    margin-left: 5px;
-    background-color: rgba(128, 128, 128, 0.13);
+    max-width: 1300px;
+    margin: 0 auto;
 }
 
 .box {

@@ -5,7 +5,8 @@ export default function Index() {
     return (
         <div className={`${Styles['home']}`}>
             <h1>Добро пожаловать!</h1>
-            {process.env.REACT_APP_MESSAGE ? <DeveloperMessage /> : <Home />}
+            <DeveloperMessage />
+            <Home />
         </div>
     );
 }
@@ -19,21 +20,15 @@ function DeveloperMessage() {
                     Привет! Я рад что ты проявил интерес к этому проекту.
                 </p>
                 <p>
-                    Это сообщение в режиме разработки, но если собрать проект с помощью
-                    <code className={`${Styles['pre']}`}>npm run build</code> то сообщение исчезнет.
+                    Этот компонент можно смело удалять.
                 </p>
             </div>
-            <About/>
         </>
     );
 }
 
 function Home() {
-    return (
-        <>
-            <About/>
-        </>
-    )
+    return <About/>;
 }
 
 function About() {

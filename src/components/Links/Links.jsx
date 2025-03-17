@@ -4,7 +4,6 @@ import {NavLink} from "react-router-dom";
 
 import {useAuth} from "../../context/Auth";
 
-
 function Links() {
     const { isAuth } = useAuth();
 
@@ -18,7 +17,7 @@ function Links() {
                     <NavLink to="cabinet">Кабинет</NavLink>
                 </li>
                 <li className={`${Styles.link}`}>
-                    <NavLink to="shared" replace>Shared</NavLink>
+                    <NavLink to="shared" replace>Shared Files</NavLink>
                 </li>
             </>
         );

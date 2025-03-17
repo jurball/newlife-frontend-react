@@ -75,7 +75,6 @@ function BoxFile(props) {
 
             if (!response.ok) throw new Error('Произошла ошибка');
 
-            const json = await response.json();
             props.setUpdate(true);
         } catch (error) {
             console.error(error);
