@@ -1,0 +1,150 @@
+@font-face {
+    font-family: 'Source Sans 3';
+    font-style: normal;
+    font-weight: 100 900;
+    src: url(fonts/SourceSans3.ttf) format('truetype');
+}
+
+* {
+    box-sizing: border-box;
+    padding: 0;
+    margin: 0;
+    font-family: 'Source Sans 3', serif;
+}
+
+#root {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+main  {
+    flex: 1 0 auto;
+    margin: 0 auto;
+    width: 100%;
+    max-width: 1300px;
+    padding: 30px 60px;
+}
+
+span {
+    font-weight: bold;
+}
+
+main > * {
+    animation: fadein 500ms ease;
+}
+
+a {
+    text-decoration: none;
+    color: black;
+}
+
+a.active {
+    text-decoration: underline;
+}
+
+form {
+    max-width: 900px;
+    margin: 100px auto 0 auto;
+    padding: 20px;
+}
+
+form button {
+    padding: 13px 20px;
+    width: 100%;
+    margin: 5px 0;
+}
+
+form h1 {
+    margin-bottom: 1rem;
+}
+
+button {
+    padding: 7px 20px;
+    border-radius: 3px;
+    border: none;
+    margin: 10px 15px;
+    background-color: black;
+    color: white;
+    cursor: pointer;
+}
+
+button[disabled] {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.is-invalid {
+    border: 1px solid red;
+    box-shadow: 0 0 0 4px rgba(255, 0, 0, 0.27);;
+    transition: 500ms all ease;
+}
+
+.success {
+    border: 1px solid green;
+    box-shadow: 0 0 0 3px rgba(0, 255, 0, 0.27);
+    transition: 500ms all ease;
+}
+
+.success-text {
+    color: green;
+    text-align: center;
+}
+
+.is-invalid-text {
+    color: red;
+    margin: 10px 0;
+}
+
+.box-file {
+    border: 2px solid black;
+    padding: 20px;
+    margin-bottom: 10px;
+    border-radius: 8px;
+}
+
+.danger-button {
+    background-color: #dd2d2d;
+}
+
+.primary-button {
+    background-color: #2d79dd;
+}
+
+.box-share {
+    max-width: 900px;
+    margin: 0 auto 0 auto;
+}
+
+.shared-container {
+    max-width: 700px;
+    margin: 0 auto;
+}
+
+.box-share button {
+    width: 100%;
+    margin: 10px 0 0 0;
+}
+
+@keyframes fadein {
+    from {
+        opacity: 0.2;
+        transform: translateY(-13px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@media screen and (max-width: 700px) {
+    header {
+        text-align: center;
+        list-style: none;
+    }
+
+    button {
+        width: 100%;
+        margin: 10px 0 10px 0;
+    }
+}

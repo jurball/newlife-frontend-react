@@ -1,8 +1,8 @@
-import Styles from './Accesses.module.css';
 import React from 'react';
+import Styles from './Accesses.module.css';
 import {Link, Navigate} from "react-router-dom";
 
-import {useAccessesFile} from "../../api/api-hook";
+import {useAccessesDeleteFile} from "../../api/api-hook";
 import NotFound from "../NotFound/NotFound";
 
 import Preloader from "../../components/Preloader/Preloader";
@@ -13,7 +13,7 @@ import {useAuth} from "../../context/Auth";
 
 function Accesses() {
     const {isAuth} = useAuth();
-    const [loading, forbidden, notFound, userNotFound, data, setBody] = useAccessesFile();
+    const [loading, forbidden, notFound, userNotFound, data, setBody] = useAccessesDeleteFile();
 
     async function handleSubmit(e) {
         e.preventDefault();
@@ -30,7 +30,7 @@ function Accesses() {
     return (
         <div>
             <form onSubmit={handleSubmit}>
-                <h1>Accesses (Share)</h1>
+                <h1>Delete Accesses (Share, удалить право)</h1>
                 <InputField
                     label="Введите e-mail"
                     name="name"
@@ -41,7 +41,6 @@ function Accesses() {
             </form>
             {data && !userNotFound && <ValidationError message={data?.message}/>}
             {userNotFound && <ValidationError message={userNotFound}/>}
-            {data?.exists && <ValidationError message={data?.exists}/>}
             {data?.status && <AddInfo data={data?.status}/>}
         </div>
     );
@@ -54,11 +53,6 @@ function AddInfo(props) {
                 <p>Email: {props.data[0].email}</p>
                 <p>Fullname: {props.data[0].fullname}</p>
                 <p>Type: {props.data[0].type}</p>
-            </div>
-            <div className={`${Styles.content}`}>
-                <p>Email: {props.data[1].email}</p>
-                <p>Fullname: {props.data[1].fullname}</p>
-                <p>Type: {props.data[1].type}</p>
             </div>
         </>
     )

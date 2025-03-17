@@ -1,45 +1,47 @@
-import {Link, useParams} from "react-router"
-import {endpoint} from "../../API/config";
+import React from 'react';
+import {Link, Navigate} from "react-router-dom";
 
-export default function Edit() {
-    const { fileId } = useParams();
+import {useEditFile} from "../../api/api-hook";
+import NotFound from "../NotFound/NotFound";
 
-    async function handleEdit(e) {
+import Preloader from "../../components/Preloader/Preloader";
+import ValidationError from "../../components/ValidationError/ValidationError";
+import InputField from "../../components/InputField/InputField";
+import Forbidden from "../Forbidden/Forbidden";
+import {useAuth} from "../../context/Auth";
+
+function Edit() {
+    const { isAuth } = useAuth();
+    const [loading, forbidden, notFound, data, setBody] = useEditFile();
+
+    async function handleSubmit(e) {
         e.preventDefault();
-        await fetchEdit(e.target.filename.value);
+        setBody({
+            name: e.target.name.value,
+        })
     }
 
-    async function fetchEdit(name) {
-        let res = await fetch(endpoint.files + `/${fileId}/`, {
-            method: "PATCH",
-            body: JSON.stringify({
-                "name": `${name}`
-            }),
-            headers: {
-                "Content-Type": "application/json",
-                "Authorization": `token ${localStorage.getItem('token')}`
-            }
-        });
-        // let data = await res.status;
-        let json = await res.json();
-
-        if(json.success) {
-            document.querySelector(".err").innerHTML = json.message;
-            return;
-        }
-
-        document.querySelector(".err").innerHTML = json.message;
-    }
+    if (!isAuth) return <Navigate to="/login"/>
+    if(loading) return <Preloader />;
+    if(forbidden) return <Forbidden />;
+    if(notFound) return <NotFound />;
 
     return (
-        <div className="edit">
-            <form onSubmit={handleEdit}>
-                <h1>Редактировать файл</h1>
-                <input type="text" name="filename" placeholder="Новое имя файла"/>
-                <input type="submit" value="Send"/>
-                <div className="err"></div>
+        <div>
+            <form onSubmit={handleSubmit}>
+                <h1>Edit</h1>
+                <InputField
+                    label="Имя файла"
+                    name="name"
+                    placeholder="Введите новое имя файла"
+                />
+                <button type="submit">Отправить</button>
+                <Link to="/cabinet">Назад</Link>
             </form>
-            <Link to="/cabinet" style={{color: "white"}}><button>Back</button></Link>
+            {data && <ValidationError message={data?.message}/>}
+            {data?.status && <p className="success-text">{data.status}</p>}
         </div>
-    )
+    );
 }
+
+export default Edit;

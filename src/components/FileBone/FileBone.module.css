@@ -1,0 +1,68 @@
+:root {
+    --speed: 1.1s;
+}
+
+.file-box {
+    /*animation: scale-box var(--speed) infinite ease-in-out;*/
+    position: relative;
+}
+
+.file-bone,
+.file-bone-box-1 {
+    background-color: #dadada;
+    margin: 10px 0 10px 0;
+    position: relative;
+    overflow: hidden;
+}
+
+.file-bone {
+    max-width: 700px;
+    margin: 0 auto;
+    height: 100px;
+    border-radius: 10px;
+}
+
+.file-bone-box-1 {
+    max-width: 400px;
+    height: 30px;
+    border-radius: 10px;
+}
+
+.file-slider {
+    background-color: #b8b8b8;
+    width: 100px;
+    height: 100%;
+    position: absolute;
+    animation: slide-box var(--speed) infinite ease-in-out;
+}
+
+@keyframes scale-box {
+    0% {
+        transform: scale(1);
+    }
+    35% {
+        transform: scale(1);
+    }
+    55% {
+        transform: scale(1.01);
+    }
+    90% {
+        transform: scale(1);
+    }
+}
+
+@keyframes slide-box {
+    0% {
+        left: 0;
+        opacity: 0.1;
+    }
+    30% {
+        opacity: 0.5;
+    }
+    50% {
+        left: 100%;
+    }
+    100% {
+        left: 100%;
+    }
+}

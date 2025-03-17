@@ -1,68 +1,106 @@
-import "./Registration.modules.css";
-import Input from "../../components/UI/Input/MyInput";
-import Button from "../../components/UI/Button/Button";
-import {NavLink, useNavigate} from "react-router";
-import {useContext, useEffect} from "react";
-import {AuthContext} from "../../context";
-import {postData} from "../../API/api-fetch";
-import {endpoint } from "../../API/config";
-import {handleErrForm} from "../../utils/lib";
+import {Link, Navigate, useNavigate} from "react-router-dom";
+import React, {useState} from "react";
 
-export default function Login() {
+import {fetchData} from "../../api/api-utils";
+import {endpoint} from "../../api/endpoint";
+
+import ValidationError from "../../components/ValidationError/ValidationError";
+import InputField from "../../components/InputField/InputField";
+import Preloader from "../../components/Preloader/Preloader";
+
+import {useAuth} from "../../context/Auth";
+
+export default function Registration() {
+    const { isAuth } = useAuth();
     const navigate = useNavigate();
-    let {isAuth, setIsAuth} = useContext(AuthContext);
 
-    useEffect(() => {
-        if(isAuth){
-            navigate("/cabinet");
-        }
+    const [disabled, setDisabled] = useState(false);
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState({});
+    const [message, setMessage] = useState({});
+    const [body, setBody] = useState({
+        first_name: "",
+        last_name: "",
+        email: "",
+        password: "",
     });
+
+    if (isAuth) {
+        return <Navigate to="/cabinet" replace />
+    }
+
+    function handleChange(e) {
+        setBody({ ...body, [e.target.name]: e.target.value });
+        setError({ ...error, [e.target.name]: "" });
+    }
 
     async function handleForm(e) {
         e.preventDefault();
-        let err = document.getElementById("error");
-        err.innerText = "";
+        setDisabled(true);
+        setError({});
+        setMessage({});
+        setLoading(true);
+        const [data] = await fetchData("POST", endpoint.registration, {
+            'Content-Type': 'application/json'
+        }, body);
 
-        const reg = {
-            email: e.target.email.value,
-            password: e.target.password.value,
-            first_name: e.target.first_name.value,
-            last_name: e.target.last.value,
+        if (!data.success && typeof data.message === "object") {
+            setError(data.message);
+            setMessage(data.message);
+        } else if (data.message === "Failed to fetch") {
+            setMessage({ status: "Ошибка сервера. Попробуйте позже или перегрузите страницу" });
+        } else if (data.success) {
+            navigate('/login');
+        } else {
+            setMessage({ status: data.message });
         }
-
-        const url = endpoint.reg;
-        let res = await postData(url, reg);
-        console.log(res);
-
-        if(res.success) {
-            localStorage.setItem("token", res.token);
-            setIsAuth(true);
-            navigate("/cabinet");
-            return;
-        }
-
-        err.innerText = handleErrForm(res);
-
-        setTimeout(() => {
-            err.innerText = '';
-        }, 5000);
+        setLoading(false);
+        setDisabled(false);
     }
 
     return (
         <form onSubmit={handleForm}>
-            <h1>Форма регистрации</h1>
-            <label htmlFor="">E-mail</label>
-            <Input placeholder="E-mail" type="email" name="email"/>
-            <label htmlFor="">Пароль</label>
-            <Input placeholder="Пароль" type="password" name="password"/>
-            <label htmlFor="">Имя</label>
-            <Input placeholder="Name" type="text" name="first_name"/>
-            <label htmlFor="">Фамилия</label>
-            <Input placeholder="Name" type="text" name="last"/>
-            <Button>Регистрация</Button>
-            <p style={{color: "blue", textDecoration: "underline"}}><NavLink to="/login">Войти</NavLink></p>
-            <div id="error"></div>
+            <h1>Регистрация</h1>
+            <InputField
+                label="Имя"
+                type="text"
+                name="first_name"
+                value={body.first_name}
+                placeholder="Enter first name"
+                onChange={handleChange}
+                error={error.first_name}
+            />
+            <InputField
+                label="Фамилия"
+                type="text"
+                name="last_name"
+                value={body.last_name}
+                placeholder="Enter last name"
+                onChange={handleChange}
+                error={error.last_name}
+            />
+            <InputField
+                label="E-mail"
+                type="email"
+                name="email"
+                value={body.email}
+                placeholder="Enter email"
+                onChange={handleChange}
+                error={error.email}
+            />
+            <InputField
+                label="Password"
+                type="password"
+                name="password"
+                value={body.password}
+                placeholder="Enter password"
+                onChange={handleChange}
+                error={error.password}
+            />
+            <button type="submit" disabled={disabled}>Send</button>
+            <Link to="/login">Войти</Link>
+            <ValidationError message={message} />
+            {loading && <Preloader />}
         </form>
-    )
-
+    );
 }

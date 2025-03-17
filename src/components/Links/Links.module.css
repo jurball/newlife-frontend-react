@@ -1,0 +1,8 @@
+.link a {
+    color: white;
+    font-weight: bold;
+}
+
+.link a:hover {
+    color: #afafaf;
+}
