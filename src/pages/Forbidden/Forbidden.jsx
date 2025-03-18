@@ -2,7 +2,7 @@ import Styles from './Forbidden.module.css';
 import React from 'react';
 import {Link} from "react-router-dom";
 
-function Forbidden(props) {
+function Forbidden() {
     return (
         <div className={`${Styles.content}`}>
             <h1>Forbidden for you 403</h1>

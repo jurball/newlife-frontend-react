@@ -30,21 +30,11 @@
 ## Сломай приложение!
 ![img_5.png](image/img_5.png)
 
-## Загрузка
-![img_3.png](image/img_3.png)
-
-## Спросим если не специально
-![img_4.png](image/img_4.png)
-
+## Файлы на сервере
+![img_7.png](image/img_7.png)
 
 ## Имя файла можно редактировать
 ![img_6.png](image/img_6.png)
 
-## Загрузите файлы на сервер
-![img_7.png](image/img_7.png)
-
 ## Поделиться с другом
 ![img_8.png](image/img_8.png)
-
-## Друг имеет право только на чтение файла
-![img_9.png](image/img_9.png)

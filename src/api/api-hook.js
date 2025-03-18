@@ -17,7 +17,6 @@ function useGetFiles() {
                 const [isAuth, json] = await getFiles();
                 if (isAuth) {
                     setData(json);
-                    console.log(json);
                 } else {
                     setAuth(false);
                 }
@@ -82,6 +81,32 @@ export function useEditFile() {
     return [loading, forbidden, notFound, data, setBody];
 }
 
+export function useGetSharedFiles() {
+    const [data, setData] = useState();
+    const [loading, setLoading] = useState(false);
+
+    useEffect(() => {
+        async function getSharedFiles() {
+            setLoading(true);
+            const response = await fetch(endpoint.shared, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${getToken()}`,
+                }
+            });
+
+            const json = await response.json()
+            setData(json);
+            setLoading(false);
+        }
+
+        getSharedFiles();
+    }, []);
+
+    return [data, loading];
+}
+
 export function useAccessesFile() {
     const location = useLocation();
     const [loading, setLoading] = useState(true);
@@ -121,8 +146,6 @@ export function useAccessesFile() {
                 });
 
                 const json = await response.json();
-                console.log(json);
-                console.log(response.status);
 
                 if (response.status === 422) {
                     setData(json);
@@ -191,8 +214,6 @@ export function useAccessesDeleteFile() {
                 });
 
                 const json = await response.json();
-                console.log(json);
-                console.log(response.status);
 
                 if (response.status === 422) {
                     setData(json);
@@ -246,7 +267,6 @@ export function useCabinetFiles() {
             const json = await response.json();
             e.target.reset();
 
-            console.log(json);
             if(response.status === 422) {
                 setMessage(json.message);
             } else if(response.status === 200) {

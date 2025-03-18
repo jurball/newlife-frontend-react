@@ -46,7 +46,6 @@ function BoxFile(props) {
             // Освобождаем память
             window.URL.revokeObjectURL(urls);
         } catch (error) {
-            console.error(error);
             alert(error.message);
         }
     }
@@ -77,7 +76,6 @@ function BoxFile(props) {
 
             props.setUpdate(true);
         } catch (error) {
-            console.error(error);
             alert(error.message);
         }
     }

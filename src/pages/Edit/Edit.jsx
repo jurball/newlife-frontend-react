@@ -2,13 +2,14 @@ import React from 'react';
 import {Link, Navigate} from "react-router-dom";
 
 import {useEditFile} from "../../api/api-hook";
+import {useAuth} from "../../context/Auth";
+
 import NotFound from "../NotFound/NotFound";
+import Forbidden from "../Forbidden/Forbidden";
 
 import Preloader from "../../components/Preloader/Preloader";
 import ValidationError from "../../components/ValidationError/ValidationError";
 import InputField from "../../components/InputField/InputField";
-import Forbidden from "../Forbidden/Forbidden";
-import {useAuth} from "../../context/Auth";
 
 function Edit() {
     const { isAuth } = useAuth();

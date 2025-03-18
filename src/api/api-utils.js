@@ -64,6 +64,14 @@ export async function getFiles() {
     }
 }
 
+export function isNotArray(items) {
+    if (!Array.isArray(items)) {
+        return true;
+    }
+
+    return !items.length > 0;
+}
+
 export const getToken = () => {
     return localStorage.getItem("token");
 }

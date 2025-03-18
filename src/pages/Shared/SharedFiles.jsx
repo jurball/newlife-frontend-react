@@ -1,15 +1,9 @@
 import React from "react";
 import {endpoint} from "../../api/endpoint";
-import {getToken} from "../../api/api-utils";
+import {getToken, isNotArray} from "../../api/api-utils";
 
 export default function SharedFiles(props) {
-    if (!Array.isArray(props.shared)) {
-        return null;
-    }
-
-    if (!props.shared.length > 0) {
-        return null;
-    }
+    if(isNotArray(props.shared)) return null;
 
     async function handleClickDownload(id) {
         try {

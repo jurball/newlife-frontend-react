@@ -1,39 +1,16 @@
-import React, {useEffect, useState} from 'react';
-import {getToken} from "../../api/api-utils";
-import {endpoint} from "../../api/endpoint";
+import React from 'react';
 import SharedFiles from "./SharedFiles";
 import FileBone from "../../components/FileBone/FileBone";
+import {useGetSharedFiles} from "../../api/api-hook";
 
 function Shared() {
-    const [data, setData] = useState();
-    const [loading, setLoading] = useState(false);
-
-    useEffect(() => {
-        async function getSharedFiles() {
-            setLoading(true);
-            const response = await fetch(endpoint.shared, {
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${getToken()}`,
-                }
-            });
-
-            const json = await response.json()
-            console.log(response);
-            console.log(json);
-            setData(json);
-            setLoading(false);
-        }
-
-        getSharedFiles();
-    }, []);
+    const [data, loading] = useGetSharedFiles();
 
     return (
         <div className="shared-container">
             <h1>Shared files</h1>
             {data?.length === 0 && <p>У вас нет доступных файлов</p>}
-            {data ? <SharedFiles shared={data}/> : ""}
+            {data && <SharedFiles shared={data}/>}
             {loading && <FileBone/>}
         </div>
     );

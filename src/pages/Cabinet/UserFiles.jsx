@@ -1,14 +1,9 @@
 import React from 'react';
 import BoxFile from "../../components/BoxFile/BoxFile";
+import {isNotArray} from "../../api/api-utils";
 
 function UserFiles(props) {
-    if (!Array.isArray(props.files)) {
-        return null;
-    }
-
-    if (!props.files.length > 0) {
-        return null;
-    }
+    if(isNotArray(props.files)) return null;
 
     return (
         <div>
