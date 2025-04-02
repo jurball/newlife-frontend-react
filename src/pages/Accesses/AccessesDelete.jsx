@@ -11,7 +11,7 @@ import InputField from "../../components/InputField/InputField";
 import {useAuth} from "../../context/Auth";
 import AddInfo from "../../components/AddInfo/AddInfo";
 
-function Accesses() {
+function AccessesDelete() {
     const {isAuth} = useAuth();
     const [loading, forbidden, notFound, userNotFound, data, setBody] = useAccessesDeleteFile();
 
@@ -46,4 +46,4 @@ function Accesses() {
     );
 }
 
-export default Accesses;
+export default AccessesDelete;

@@ -12,8 +12,6 @@ import ValidationError from "../../components/ValidationError/ValidationError";
 import InputField from "../../components/InputField/InputField";
 import AddInfo from "../../components/AddInfo/AddInfo";
 
-
-
 function Accesses() {
     const {isAuth} = useAuth();
     const [loading, forbidden, notFound, userNotFound, data, setBody] = useAccessesFile();
